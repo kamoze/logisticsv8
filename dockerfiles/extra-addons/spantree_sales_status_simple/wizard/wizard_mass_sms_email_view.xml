@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_mass_sms_email_form" model="ir.ui.view">
+             <field name="name">wizard.mass.sms.email.form</field>
+             <field name="model">wizard.mass.sms.email</field>
+             <field name="arch" type="xml">
+                <form string="Mass SMS" version="7.0">
+                    <group>
+                        <field name="msg_type" on_change="onchange_msg_type(msg_type)"/>
+                        <field name="send_option"/>
+                    </group>
+                    <group attrs="{'invisible': [('send_option','in', ['selected','all'])]}">
+                        <field name="group_id" attrs="{'required': [('send_option','=', 'group')]}"/>
+                    </group>
+                    <group>
+                        <field name="template_id" on_change="onchange_template(msg_type, template_id)"/>
+                    </group>
+                    <group attrs="{'invisible': [('send_option','in', ['group','all'])]}">
+                        <separator string="Customers" colspan="4"/>
+                        <field name="customer_ids" nolabel="1" attrs="{'required': [('send_option','=', 'selected')]}" 
+                               colspan="4" domain="[('customer','=',True)]"/>
+                    </group>
+                    <group attrs="{'invisible': [('msg_type','=', 'sms')]}">
+                        <field name="subject" attrs="{'required': [('msg_type','=', 'email')]}"/>
+                    </group>
+                    <separator string="Message" colspan="4"/>
+                    <group attrs="{'invisible': [('msg_type','=', 'email')]}">
+                        <field name="message" nolabel="1" colspan="4" 
+                               attrs="{'required': [('msg_type','=', 'sms')]}"/>
+                    </group>
+                    <group attrs="{'invisible': [('msg_type','=', 'sms')]}">
+                        <field name="email_message" nolabel="1" colspan="4"
+                               attrs="{'required': [('msg_type','=', 'email')]}" widget="html"/>
+                    </group>
+                    <footer>
+                        <button name="action_send" string="Send" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+             </field>
+         </record>
+
+         <record id="action_mass_sms_email" model="ir.actions.act_window">
+             <field name="name">Mass SMS/Email</field>
+             <field name="res_model">wizard.mass.sms.email</field>
+             <field name="type">ir.actions.act_window</field>
+             <field name="view_type">form</field>
+             <field name="view_mode">form</field>
+             <field name="target">new</field>
+       </record>
+
+       <menuitem
+            action="action_mass_sms_email"
+            id="menu_mass_sms_email"
+            parent="base.menu_sales"/>
+
+    </data>
+</openerp>

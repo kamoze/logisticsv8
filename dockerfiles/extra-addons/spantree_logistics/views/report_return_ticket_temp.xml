@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <template id="bus_return_ticket_document">
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+            <div t-as="l" t-foreach="get_trip_seat(o)">
+                <div class="header">
+                    <div class="row">
+                        <!-- <img t-if="o.image" t-att-src="'data:image/png;base64,%s' % o.image" style="max-height: 3cm; min-width: 8cm;"/> -->
+                    </div>
+                </div>
+                 <div class="footer">
+                    <div class="row">
+                        <!-- <div style="margin-left:40px;font-size:10px;margin-top:30px;">Price: </div> -->
+		</div>
+                </div>
+                <div class="page">
+                    <div class="row">
+                        <table class="table table-condensed" style="min-width: 2cm;">
+                            <tbody>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span>Seat:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="l.seat_no.seat_no"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+	                                    <span>Date:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="get_date(l.trip_id.start_time)"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span>Time:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="get_time(l.trip_id.start_time)"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+	                                    <span>Amount:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="l.price"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left">
+	                                    <span>Boarding Location:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="l.board_loc_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span>Name:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="l.name"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            <div class="oe_left">
+				<span style="margin-left:50px;" t-esc="o.name"/>
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;' % ('Code128', str(o.name), 300, 60)"/>
+			    </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top: -30px !important">
+                        <div style="padding-top: -30px !important">
+                            
+                        </div>
+                        <div style="border-bottom: 1px dotted black; margin-top:5px;"/>
+                        <div>
+                            <p align="center" style="font-size: 10px; margin-top:5px;">Ticket Is Non Refundable After 30 Days</p>
+                        </div>
+                        <div>
+                           <h4 align="center" style="margin-top:10px;">
+                                <div><strong><span t-field="l.source_id"/></strong></div>
+				<div><strong><span t-field="l.dest_id"/></strong></div>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table border="0" class="table table-condensed" style="min-width: 5cm;">
+                            <tbody>
+                            </tbody>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span>Seat:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-field="l.seat_no.seat_no"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span>Date:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="get_date(l.trip_id.start_time)"  t-esc-options='{"format": "d MMMM y"}'/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span>Time:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="get_time(l.trip_id.start_time)"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+	                                    <span>Amount:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="l.price"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;">
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+	                                    <span>Boarding Location:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="l.board_loc_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 10px;" >
+                                    <td class="text-left" style="font-size: 10px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span>Name:</span>
+                                    </td>
+                                    <td class="text-left" style="font-size: 15px; padding-top: 1px; padding-bottom: 0px;">
+                                    <span t-esc="l.name"/>
+                                    </td>
+                                </tr>
+                        </table>
+			<div><span style="margin-left:50px;" t-esc="o.name"/></div>
+			<div><img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;' % ('Code128', str(o.name), 300, 60)"/></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="report_return_ticket_temp">
+            <t t-call="report.html_container">
+                <t t-as="doc_id" t-foreach="doc_ids">
+                    <t t-raw="translate_doc(doc_id, doc_model, 'customer_id.lang', 'spantree_logistics.bus_return_ticket_document')"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

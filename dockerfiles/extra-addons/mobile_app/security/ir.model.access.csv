@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+portal_msaln,model_student_assessment_line_new,cust_grade_report.model_student_assessment_line_new,base.group_portal,1,0,0,0
+portal_mcaaa,model_account_analytic_account,analytic.model_account_analytic_account,base.group_portal,1,0,0,0
+porta_mcp,model_crm_phonecall,crm.model_crm_phonecall,base.group_portal,1,0,0,0
+portal_maf,model_account_fiscalyear,account.model_account_fiscalyear,base.group_portal,1,0,0,0
+portal_mcl,model_crm_lead,crm.model_crm_lead,base.group_portal,1,0,0,0
+portal_mrpb,model_res_partner_bank,base.model_res_partner_bank,base.group_portal,1,0,0,0

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="acquirer_form_paystack" model="ir.ui.view">
+            <field name="name">acquirer.form.paystack</field>
+            <field name="model">payment.acquirer</field>
+            <field name="inherit_id" ref="payment.acquirer_form"/>
+            <field name="arch" type="xml">
+                <xpath expr='//group[@name="acquirer_display"]' position='after'>
+                    <group attrs="{'invisible': [('provider', '!=', 'paystack')]}">
+                        <group>
+                            <group>
+                                <field name="paystack_test_public_key"/>
+                                <field name="paystack_test_private_key"/>
+                                
+                                <field name="paystack_live_public_key"/>
+                                <field name="paystack_live_private_key" />
+                                
+                            </group>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="transaction_form_paystack" model="ir.ui.view">
+            <field name="name">acquirer.transaction.form.paystack</field>
+            <field name="model">payment.transaction</field>
+            <field name="inherit_id" ref="payment.transaction_form"/>
+            <field name="arch" type="xml">
+                <xpath expr='//notebook' position='inside'>
+                    <page string="Paystack TX Details">
+                        <group>
+                            <field name="paystack_txn_id"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    
+        
+        <record id="customer_paystack_form" model="ir.ui.view">
+            <field name="name">customer.invoice.paystack.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/notebook" position="before">
+                    <button type="object" class="oe_highlight" string="Online payment with Paystack" name="payment_paystack" attrs="{'invisible': [('state', '!=',  'open')]}" />
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[last()]" position="after">
+                    <page string="Paystack" >
+                        <button type="object" class="oe_highlight" string="Online payment with Paystack" name="payment_paystack" attrs="{'invisible': [('state', '!=',  'open')]}" />
+                        <field name="paystack_ids" nolabel="1" >
+                            <tree>
+                               <field name="ref" />
+                               <field name="remark_by_auto_user" />
+                               <field name="log_user_id" />
+                               <field name="log_timestampe" />
+                               <field name="status" />
+                            </tree>
+                            <form>
+                               <group>
+                                   <field name="name" />
+                                   <field name="status" />
+                                   <field name="remark_by_auto_user"/>
+                               </group>
+                               <group>
+                                   <field name="log_user_id"/>
+                                   <field name="log_timestampe"/>
+                               </group>
+                            </form>
+                         </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="paystack_list_view" model="ir.ui.view">
+            <field name="name">paystack.list.view</field>
+            <field name="model">paystack.logs</field>
+            <field name="arch" type="xml">
+                <tree string="Paystack Logs">
+                    <field name="name" />
+                    <field name="log_timestampe" />
+                    <field name="log_user_id" />
+                    <field name="status" />
+                </tree>
+            </field>
+        </record>
+        
+        <record id="paystack_form_view" model="ir.ui.view">
+            <field name="name">paystack.form.view</field>
+            <field name="model">paystack.logs</field>
+            <field name="arch" type="xml">
+                <form string="Paystack Logs">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                                <field name="status" />
+                            </group>
+                            <group>
+                                <field name="log_timestampe" />
+                                <field name="log_user_id" />
+                             </group>
+                        </group>
+                        <group>
+                            <group>
+	                            <field name="invoice_id" />
+	                            <field name="order_id" />
+	                         </group>
+                        </group>
+                        <group>
+                            <field name="remark_by_auto_user" nolabel="1" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="paystack_logs_action" model="ir.actions.act_window">
+            <field name="name">Paystack Logs</field>
+            <field name="res_model">paystack.logs</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+<!--        <menuitem id="paystack_logs_menu" name="Paystack Logs" parent="account.menu_finance_receivables" action="paystack_logs_action"  /> -->
+<!--         <menuitem id="portal_paystack_logs_menu" name="Paystack Logs" parent="portal.portal_orders" action="paystack_logs_action" /> -->
+        
+    </data>
+</openerp>

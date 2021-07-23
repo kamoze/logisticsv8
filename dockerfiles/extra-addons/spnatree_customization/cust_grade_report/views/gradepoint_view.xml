@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+      <record id="inherit_view_op_gradepoint_form_form" model="ir.ui.view">
+         <field name="name">inherit.op.gradepoint.form</field>
+         <field name="model">op.gradepoint</field>
+         <field name="inherit_id" ref="openeducat_ext.view_op_gradepoint_form"/>
+         <field name="arch" type="xml">
+            <xpath expr="//button[@name='calculate_grade']" position="after">
+              <button string="Calculate Grade" name='update_calculate_grade' class="oe_highlight" type='object'/>
+            </xpath>
+
+						<!-- Hide Grade Calculate button and keep new button added update_calculate_grade-->
+						<xpath expr="//button[@name='calculate_grade']" position="attributes">
+							<attribute name="invisible">1</attribute>
+						</xpath>
+
+
+						<xpath expr="//field[@name='grade_calculation_per_sem_line']/form/sheet/group/field[@name='grade_point']" position="after">
+							<field name="use_new_student_assessment_line"/>
+						</xpath>
+
+						<xpath expr="//field[@name='grade_calculation_per_sem_line']/form/sheet/group/field[@name='gradepoint_assignment_ids']" position="after">
+								<field name="student_assessment_lines">
+										<tree editable="bottom">
+												<field name="student_id"/>
+												<field name="registered_subject"/>
+												<field name="assignment_type" domain="[('ap_type','=','ca')]"/>
+												<field name="obtained_marks"/>
+												<!-- <field name="percentage"/> -->
+												<field name="grade_line_id" invisible="1"/>
+										</tree>
+								</field>
+
+								<field name="exam_score_lines">
+										<tree editable="bottom">
+												<field name="student_id"/>
+												<field name="status"/>
+												<field name="marks"/>
+												<!-- <field name="percentage"/> -->
+												<field name="grade_line_id" invisible="1"/>
+										</tree>
+								</field>
+						</xpath>
+
+
+
+						<xpath expr="//form/sheet" position="after">
+							<div class="oe_chatter">
+									<field name="message_follower_ids" widget="mail_followers"/>
+									<field name="message_ids" widget="mail_thread"/>
+							</div>
+						</xpath>
+
+         </field>
+      </record>
+  </data>
+</openerp>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem name="SMS/Email" id="menu_sms_email" parent="base.menu_base_config"/>
+
+        <record model="ir.ui.view" id="view_sms_config_form">
+            <field name="name">sms.config.form</field>
+            <field name="model">sms.config</field>
+            <field name="arch" type="xml">
+                <form string="SMS Configuration">
+                    <group>
+                        <field name="url"/>
+                        <field name="login"/>
+                        <field name="password"/>
+                        <field name="active"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_sms_config_tree">
+            <field name="name">sms.config.tree</field>
+            <field name="model">sms.config</field>
+            <field name="arch" type="xml">
+                <tree string="SMS Configuration">
+                    <field name="url"/>
+                    <field name="login"/>
+                    <field name="password"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_sms_config">
+            <field name="name">SMS Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sms.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem parent="menu_sms_email" id="menu_sms_config" 
+                  action="action_sms_config"/>
+
+        <!--  SMS Group -->
+
+        <record model="ir.ui.view" id="view_sms_group_form">
+            <field name="name">sms.group.form</field>
+            <field name="model">sms.group</field>
+            <field name="arch" type="xml">
+                <form string="SMS Group">
+                    <group col="4" colspan="4">
+                        <field name="name"/>
+                        <field name="type"/>
+                    </group>
+                    <group>
+                        <field name="partner_ids"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_sms_group_tree">
+            <field name="name">sms.group.tree</field>
+            <field name="model">sms.group</field>
+            <field name="arch" type="xml">
+                <tree string="SMS Group">
+                    <field name="name"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_sms_group">
+            <field name="name">SMS Group</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sms.group</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem parent="menu_sms_email" id="menu_sms_group" 
+                  action="action_sms_group"/>
+
+        <!--  Message Template -->
+
+        <record model="ir.ui.view" id="view_message_template_form">
+            <field name="name">message.template.form</field>
+            <field name="model">message.template</field>
+            <field name="arch" type="xml">
+                <form string="Message Template">
+                    <group col="4" colspan="4">
+	                    <field name="name"/>
+	                    <field name="type"/>
+	                    <field name="subject" attrs="{'invisible': [('type', '=', 'sms')]}"/>
+                    </group>
+                    <separator string="Message" colspan="4"/>
+                    <group attrs="{'invisible': [('type', '=', 'email')]}">
+                        <field name="message" colspan="4" nolabel="1"/>
+                    </group>
+                    <group attrs="{'invisible': [('type', '=', 'sms')]}">
+                        <field name="email_message" widget="html" colspan="4" nolabel="1"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_message_template_tree">
+            <field name="name">message.template.tree</field>
+            <field name="model">message.template</field>
+            <field name="arch" type="xml">
+                <tree string="Message Template">
+                    <field name="name"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_message_template">
+            <field name="name">Message Template</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">message.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem parent="menu_sms_email" id="menu_message_template" 
+                  action="action_message_template"/>
+
+    </data>
+</openerp>

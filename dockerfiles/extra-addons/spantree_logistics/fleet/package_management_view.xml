@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Tree view of Package Management -->
+        <record model="ir.ui.view" id="view_package_transfer_tree">
+            <field name="name">view.package.transfer.tree</field>
+            <field name="model">fleet.package</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Package Management">
+                    <field name="name"/>
+                    <field name="sender_id"/>
+                    <field name="receiver_id"/>
+                    <field name="package_name"/>
+                    <field name="date"/>
+                    <field name="dest_loc_id"/>
+                    <field name="price_on"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view of Package Management -->
+        <record model="ir.ui.view" id="view_package_transfer_form">
+            <field name="name">view.package.transfer.form</field>
+            <field name="model">fleet.package</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Package Management">
+                    <header>
+                        <button name="confirm_package" states="draft" type="object" string="Process Package" class="oe_highlight oe_inline"/>
+          <!--               <button name="action_view_invoice" states="confirm" string="View Invoice" type="object" class="oe_highlight oe_inline"/> -->
+                        <button name="create_transfer_move" states="receive" string="Transfer Package" type="object" class="oe_highlight oe_inline"/>
+                        <button name="create_delivery_move" states="transfer" string="Deliver Package" type="object" class="oe_highlight oe_inline"/>
+                        <button name="action_receive_package" states="confirm" string="Recieve Package" type="object" class="oe_highlight oe_inline"/>
+                        <button name="action_print_invoice" states="receive" string="Print Invoice" type="object" class="oe_highlight oe_inline" context="{'invoice_id':invoice_id}"/>
+                        <field name="state" widget='statusbar'/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <label string="Package "/>
+                            <field name="name" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="sender_id" attrs="{'readonly':[('state', '!=', 'draft')]}" required="1" domain="[('customer','=',True)]"/>
+                                <field name="receiver_id" attrs="{'readonly':[('state', '!=', 'draft')]}" required="1" domain="[('customer','=',True)]"/>
+                                <field name="package_name" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="package_desc" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="receiver_move" invisible="1"/>
+                                <field name="delivery_move" invisible="1"/>
+                                <field name="signature" attrs="{'invisible': [('state', 'in', ('draft', 'confirm', 'receive', 'transfer'))]}" widget="signature"/>
+                                <field name="package_barcode" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="source_loc_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="dest_loc_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="package_cat_id" widget="selection" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="price_type" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="volume" attrs="{'invisible':[('price_type', 'in', ['fixed','weight'])],'required':[('price_type', '=', 'volume')]}"/>
+                                <field name="weight" attrs="{'invisible':[('price_type', 'in', ['volume','fixed'])],'required':[('price_type', '=', 'weight')]}"/>
+                                <field name="type_rate" attrs="{'readonly':[('price_type', 'in', ['fixed'])]}"/>
+                                <field name="delivery_charge" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="price_on" readonly="1"/>
+                                <field name="receive_user" widget="selection"/>
+                                <field name="invoice_id" invisible="1"/>
+                                <field name="delivery_date" attrs="{'invisible':[('state', 'in', ['draft', 'confirm'])], 'required':[('state', 'not in', ['draft', 'confirm'])]}"/>
+                                <field name="driver_id" attrs="{'invisible':[('state', 'in', ['draft', 'confirm'])], 'required':[('state', 'not in', ['draft', 'confirm'])]}"/>
+                                <field name="fleet_id" attrs="{'invisible':[('state', 'in', ['draft', 'confirm'])]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for Package Management -->
+        <record model="ir.actions.act_window" id="action_package_management">
+            <field name="name">Package Management</field>
+            <field name="res_model">fleet.package</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_package_management_form_view">
+            <field eval="1" name="sequence"/>
+            <field name="name">Package Management</field>
+            <field name="res_model">fleet.package</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+    <!-- Tree view of Package Fare -->
+        <record model="ir.ui.view" id="view_package_fare_tree">
+            <field name="name">view.package.fare.tree</field>
+            <field name="model">package.fare</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Package Fare" editable="top">
+                    <field name="package_cat_id"/>
+                    <field name="source_loc_id"/>
+                    <field name="dest_loc_id"/>
+                    <field name="rate"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_package_fare">
+            <field name="name">Package Fare</field>
+            <field name="res_model">package.fare</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</openerp>

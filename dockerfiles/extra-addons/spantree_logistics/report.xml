@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report 
+            id="fleet_parking_pass_report"
+            model="parking.pass"
+            string="Parking Pass"
+            report_type="qweb-pdf"
+            name="spantree_logistics.report_parking_pass_template"
+            file="spantree_logistics.report_parking_pass_template"
+        />
+
+         <report 
+            id="fleet_parking_report"
+            model="fleet.parking"
+            string="Parking Report"
+            report_type="qweb-pdf"
+            name="spantree_logistics.report_parking_template"
+            file="spantree_logistics.report_parking_template"
+        />
+
+        <report 
+            id="vehicle_wise_booking_report"
+            model="vehicle.seats.compute"
+            string="Vehicle Booking"
+            report_type="qweb-pdf"
+            name="spantree_logistics.vehicle_wise_booking_template"
+            file="spantree_logistics.vehicle_wise_booking_template"
+        />
+
+        <report 
+            id="report_seat_reservation"
+            string="Check Seat Status"
+            model="fleet.trip"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_seat_reservation_temp"
+            name="spantree_logistics.report_seat_reservation_temp"
+        />
+      <!--   
+        <report 
+            id="report_seat_status"
+            string="Check Seat Status"
+            model="fleet.trip"
+            report_type="qweb-pdf"
+            file="transport_management.report_seat_status_temp"
+            name="transport_management.report_seat_status_temp"
+        />
+ -->
+        
+        <report 
+            id="report_trip_boarding_chart"
+            string="Trip Manifest"
+            model="trip.board.passenger"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_trip_boarding_chart_temp"
+            name="spantree_logistics.report_trip_boarding_chart_temp"
+        />
+
+        <report 
+            id="report_trip_boarding_luggage"
+            string="Luggage Manifest"
+            model="trip.board.passenger"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_trip_boarding_luggage_temp"
+            name="spantree_logistics.report_trip_boarding_luggage_temp"
+        />
+
+        <report 
+            id="report_package_transfer_waybill"
+            string="Way Bill"
+            model="wizard.waybill"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_package_waybill_template"
+            name="spantree_logistics.report_package_waybill_template"
+        />
+
+        <record id="paperformat_seat_reservation" model="report.paperformat">
+            <field name="name">Custom Seat Reservation</field>
+            <field name="default" eval="True" />
+            <field name="format">custom</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">23</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+            <field name="report_ids" eval="[(6,0,[ref('spantree_logistics.report_package_transfer_waybill'),ref('spantree_logistics.report_seat_reservation'), ref('spantree_logistics.report_trip_boarding_chart'), ref('spantree_logistics.report_trip_boarding_luggage')])]"/>
+        </record>
+
+        <report 
+            id="report_bus_ticket"
+            string="Tickets"
+            model="fleet.trip.reservation"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_ticket_temp"
+            name="spantree_logistics.report_ticket_temp"
+        />
+
+<!--         <report  -->
+<!--             id="report_return_bus_ticket" -->
+<!--             string="Return Tickets" -->
+<!--             model="fleet.trip.reservation" -->
+<!--             report_type="qweb-pdf" -->
+<!--             file="transport_management.report_return_ticket_temp" -->
+<!--             name="transport_management.report_return_ticket_temp" -->
+<!--         /> -->
+
+        <report 
+            id="report_tag_source_dest"
+            string="Luggage Tags Source Dest."
+            model="fleet.trip.reservation"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_source_dest_temp"
+            name="spantree_logistics.report_source_dest_temp"
+        />
+        
+        <report 
+            id="report_tag_dest_source"
+            string="Luggage Tags Dest. Source"
+            model="fleet.trip.reservation"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_dest_source_temp"
+            name="spantree_logistics.report_dest_source_temp"
+        />
+
+        <report 
+            id="report_tag_package_transfer"
+            string="Package Transfer Tag"
+            model="fleet.package"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_package_transfer_temp"
+            name="spantree_logistics.report_package_transfer_temp"
+        />
+
+        <report 
+            id="report_tag_money_transfer"
+            string="Money Transfer Tag"
+            model="fleet.money.transfer"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_money_transfer_temp"
+            name="spantree_logistics.report_money_transfer_temp"
+        />
+
+         <record id="paperformat_custom_ticket" model="report.paperformat">
+            <field name="name">Bus Custom</field>
+            <field name="default" eval="True" />
+            <field name="format">custom</field>
+            <field name="page_height">139</field>
+            <field name="page_width">50</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">14</field>
+            <field name="margin_bottom">21</field>
+            <field name="margin_left">1</field>
+            <field name="margin_right">1</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">18</field>
+            <field name="dpi">90</field>
+            <field name="report_ids" eval="[(6,0,[ref('spantree_logistics.report_bus_ticket')])]"/>
+        </record>
+
+<!--     <record id="paperformat_return_custom_ticket" model="report.paperformat"> -->
+<!--             <field name="name"> Return Bus Custom</field> -->
+<!--             <field name="default" eval="True" /> -->
+<!--             <field name="format">custom</field> -->
+<!--             <field name="page_height">139</field> -->
+<!--             <field name="
+        <report 
+            id="report_trip_boarding_chart"
+            string="Trip Manifest"
+            model="trip.board.passenger"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_trip_boarding_chart_temp"
+            name="spantree_logistics.report_trip_boarding_chart_temp"
+        />page_width">50</field> -->
+<!--             <field name="orientation">Portrait</field> -->
+<!--             <field name="margin_top">14</field> -->
+<!--             <field name="margin_bottom">21</field> -->
+<!--             <field name="margin_left">1</field> -->
+<!--             <field name="margin_right">1</field> -->
+<!--             <field name="header_line" eval="False" /> -->
+<!--             <field name="header_spacing">18</field> -->
+<!--             <field name="dpi">90</field> -->
+<!--             <field name="report_ids" eval="[(6,0,[ref('transport_management.report_return_bus_ticket')])]"/> -->
+<!--         </record> -->
+
+        <record id="paperformat_tag_ticket" model="report.paperformat">
+            <field name="name">Tag Custom</field>
+            <field name="default" eval="True" />
+            <field name="format">custom</field>
+            <field name="page_height">55</field>
+            <field name="page_width">80</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">12</field>
+            <field name="margin_left">1</field>
+            <field name="margin_right">1</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">10</field>
+            <field name="dpi">90</field>
+            <field name="report_ids" eval="[(6,0,[ref('spantree_logistics.report_tag_dest_source'),ref('spantree_logistics.report_tag_source_dest'),ref('spantree_logistics.fleet_parking_report'),ref('spantree_logistics.report_tag_package_transfer'),ref('report_tag_money_transfer'), ref('fleet_parking_pass_report')])]"/>
+        </record>
+
+		<report 
+            id="report_tag_order_analysis"
+            string="Order Analysis Tag"
+            model="order.analysis.wizard"
+            report_type="qweb-pdf"
+            file="spantree_logistics.report_order_analysis_template"
+            name="spantree_logistics.report_order_analysis_template"
+        />
+
+    </data>
+</openerp>

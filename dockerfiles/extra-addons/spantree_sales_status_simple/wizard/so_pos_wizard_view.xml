@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="so_pos_detail_view" model="ir.ui.view">
+             <field name="name">so.pos.detail.view</field>
+             <field name="model">so.pos.wizard</field>
+             <field name="arch" type="xml">
+                <form string="Sale-POS Detail" version="7.0">
+                    <label string="Send today's Sale-POS sales details"/>
+                    <footer>
+                        <button name="send_mail" string="Send" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+             </field>
+         </record>
+
+         <record id="action_so_pos_detail" model="ir.actions.act_window">
+             <field name="name">Sale and POS Detail</field>
+             <field name="res_model">so.pos.wizard</field>
+             <field name="type">ir.actions.act_window</field>
+             <field name="view_type">form</field>
+             <field name="view_mode">form</field>
+             <field name="target">new</field>
+       </record>
+
+       <menuitem
+            action="action_so_pos_detail"
+            id="menu_so_pos_detail"
+            parent="base.menu_sales"/>
+
+    </data>
+</openerp>

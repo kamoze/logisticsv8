@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="state_id" position="before">
+                    <field name="city_id" placeholder="City" style="width: 40%%" attrs="{'readonly': [('use_parent_address','=',True)]}"/>
+                </field>
+                <xpath expr="//sheet/group/group/div[@name='div_type']" position="after">
+                    <field name="kin_name"/>
+                    <field name="kin_no"/>
+                </xpath>
+                <field name="city" position="replace">
+                    <field name="city" invisible="1"/>
+                </field>
+                <xpath expr="//sheet/div[@class='oe_title oe_left']/field[@name='category_id']" position="after">
+	                <label for="pin_no"/>
+	                <field name="pin_no"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_users_form" model="ir.ui.view">
+            <field name="name">res.users.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <div class="oe_title" position="inside">
+                    <group>
+                        <field name="pin_no" style="width: 40%"/>
+                        <field name="parking_city_id" groups="spantree_logistics.group_parking_user" style="width: 40%%"/>
+                        <field name="default_arrival_city_id" style="width: 40%%"/>
+                    </group>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</openerp>

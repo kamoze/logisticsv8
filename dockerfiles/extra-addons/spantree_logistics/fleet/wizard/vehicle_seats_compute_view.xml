@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_vehicle_seat_compute" model="ir.ui.view">
+            <field name="name">Vehicle Profit Report</field>
+            <field name="model">vehicle.seats.compute</field>
+            <field name="arch" type="xml">
+                <form string="Parameters">
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                    <footer>
+                        <button name="vehicle_report_call" string="Compute Seats" type="object"  class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Vehicle Profit Report"
+            res_model="vehicle.seats.compute"
+            src_model="fleet.vehicle"
+            view_mode="form"
+            target="new"
+            id="action_vehicle_seats_compute"/>
+
+    </data>
+</openerp>

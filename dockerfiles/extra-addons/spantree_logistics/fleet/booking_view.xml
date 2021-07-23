@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_vehicle_booking_fare_form">
+            <field name="name">vehicle.booking.fare</field>
+            <field name="model">vehicle.booking.fare</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Vehicle Booking Fare">
+                    <sheet>
+                        <h3>
+                            <label string="Vehicle"/>
+                            <field name="vehicle_id" class="oe_inline"/>
+                        </h3>
+                        <group string="Price Details">
+                            <group>
+                                <field name="hour_price"/>
+                                <field name="day_price"/>
+                            </group>
+                            <group>
+                                <field name="week_price"/>
+                                <field name="fixed_price" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_vehicle_booking_fare_tree">
+            <field name="name">vehicle.booking.fare</field>
+            <field name="model">vehicle.booking.fare</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Vehicle Booking Fare">
+                    <field name="vehicle_id"/>
+                    <field name="hour_price"/>
+                    <field name="day_price"/>
+                    <field name="week_price"/>
+                    <field name="fixed_price" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_vehicle_booking_fare" model="ir.actions.act_window">
+            <field name="res_model">vehicle.booking.fare</field>
+            <field name="view_type">form</field>
+            <field name="name">Vehicle Booking Fare</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="act_booking_2_invoice" model="ir.actions.act_window">
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="name">Invoices</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('vehicle_book_id','=',active_id)]</field>
+            <field name="context">{'search_default_vehicle_book_id': [active_id], 'default_vehicle_book_id': active_id}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_view_booking_view">
+            <field eval="2" name="sequence"/>
+            <field name="name">Vehicle Booking</field>
+            <field name="res_model">fleet.vehicle.booking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar</field>
+<!--            <field name="domain">[('id','!=', active_id)]</field> -->
+	    <field name="domain">[('id','=',active_id)]</field>
+            <field name="context">{'search_default_filter_confirmed': 1, 'search_default_filter_in_progress': 1}</field>
+        </record>
+
+        <record id="view_vehicle_booking_search" model="ir.ui.view">
+            <field name="name">fleet.vehicle.booking.search</field>
+            <field name="model">fleet.vehicle.booking</field>
+            <field name="arch" type="xml">
+                <search string="Vehicle Booking Search">
+                    <filter name="filter_draft" string="Draft" domain="[('state','=','draft')]"/>
+                    <filter name="filter_confirmed" string="Confirmed" domain="[('state','=','confirmed')]"/>
+                    <filter name="filter_in_progress" string="In Progress" domain="[('state','=','in_progress')]"/>
+                    <filter name="filter_done" string="Done" domain="[('state','=','done')]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- fleet.vehicle.booking-->
+        <record model="ir.ui.view" id="view_vehicle_booking_form">
+            <field name="name">fleet.vehicle.booking.form</field>
+            <field name="model">fleet.vehicle.booking</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Vehicle Booking">
+                    <header>
+                        <button name="action_confirm" type="object" string="Confirm" states="draft"/>
+                        <button name="start_booking" type="object" string="Start Booking" states="confirmed"/>
+                        <button name="make_payment" type="object" string="Make Payment"
+                            attrs="{'invisible':['|', ('state', 'not in', ('confirmed', 'in_progress')), ('is_invoiced','=',True)]}"/>
+<!--                         <button name="make_payment" type="object" string="Make Payment" states="in_progress"/> -->
+                        <button name="%(action_view_booking_view)d" type="action" string="View Bookings"/>
+                        <!-- <button name="%(booking_payment_act)d" type="action" string="Make Payment" states="draft"/> -->
+                        <button name="create_refund"  string="Refund" type="object" states="confirmed" />
+                        <button name="action_done"  string="Done" type="object" states="in_progress" />
+                        <button name="action_print_invoice"  string="Print Invoice" type="object" attrs="{'invisible': [('invoice_id', '=', False)]}" />
+                        <button name="action_cancel" string="Cancel" type="object" states="draft"/>
+ <!--                        <button name="%(act_booking_2_invoice)d" string="View Invoice" type="action" /> -->
+                        <field name="state" widget='statusbar' statusbar_visible="draft,confirmed,in_progress,done"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <label string="Vehicle Booking "/>
+                            <field name="number" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group col="2">
+                            <group string="Customer Details">
+                                <field name="customer_id" domain="[('customer','=',True)]"/>
+                                <field name="vehicle_id" context="{'start_date': start_date, 'end_date':end_date}"/>
+                                <field name="start_city"/>
+                                <field name="end_city"/>
+                                <field name="is_invoiced" invisible="1"/>
+                                <field name="invoice_id" readonly="1"/>
+                            </group>
+                            <group string="Payment Details">
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="trip_days" attrs="{'invisible': [('amount_based_on', '!=', 'days')]}"/>
+                                <field name="trip_hours" widget="float_time" attrs="{'invisible': [('amount_based_on', '!=', 'hours')]}"/>
+                                <field name="trip_weeks" attrs="{'invisible': [('amount_based_on', '!=', 'weeks')]}"/>
+                                <field name="amount_based_on"/>
+                                <field name="fixed_charge" attrs="{'invisible': [('amount_based_on', '!=', 'fixed')], 'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="charge_per_day" attrs="{'invisible': [('amount_based_on', '!=', 'days')], 'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="charge_per_hour" attrs="{'invisible': [('amount_based_on', '!=', 'hours')], 'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="charge_per_week" attrs="{'invisible': [('amount_based_on', '!=', 'weeks')], 'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="extra_amt" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="final_price" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Booking Documents">
+                                <field name="document_ids" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </page>
+                            <page string="Note">
+                                <field name="note" nolabel="1"/>
+                            </page>
+                            <page string="Reason For Cancel" >
+                                <field name="reason_cancel"/>
+                            </page>
+                            <page string="Penalties">
+                                <field name="penalties_lines">
+                                    <tree string="Penalties Lines" editable="top">
+                                        <field name="product_id"/>
+                                        <field name="name"/>
+                                        <field name="amount"/>
+                                        <field name="invoice_id" invisible="1"/>
+                                        <field name="booking_id" invisible="1"/>
+                                        <button name="make_payment" type="object" string="Create Invoice" context="{'from_penalties_lines': True}" icon="STOCK_EDIT"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_vehicle_booking_calendar">
+            <field name="name">fleet.vehicle.booking.calendar</field>
+            <field name="model">fleet.vehicle.booking</field>
+            <field name="arch" type="xml">
+                <calendar string="View Bookings"
+                    date_start="start_date" date_stop="end_date" color="vehicle_id">
+                    <field name="number"/>
+                    <field name="vehicle_id"/>
+<!--                     <field name="start_date"/> -->
+<!--                     <field name="end_date"/> -->
+                </calendar>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_vehicle_booking_tree">
+            <field name="name">fleet.vehicle.booking.tree</field>
+            <field name="model">fleet.vehicle.booking</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Vehicle Booking">
+                    <field name="number"/>
+                    <field name="customer_id"/>
+                    <field name="vehicle_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="start_city"/>
+                    <field name="end_city"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_booking_document_tree">
+            <field name="name">view.booking.document.tree</field>
+            <field name="model">fleet.money.document</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Booking Documents" editable="bottom">
+                    <field name="name"/>
+                    <field name="document"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_vehicle_booking">
+            <field name="name">Vehicle Booking</field>
+            <field name="res_model">fleet.vehicle.booking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_vehicle_booking_form_view">
+            <field eval="1" name="sequence"/>
+            <field name="name">Vehicle Booking</field>
+            <field name="res_model">fleet.vehicle.booking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+    </data>
+</openerp>

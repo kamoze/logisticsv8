@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="report_parking_document">
+            <!-- Header -->
+            <div class="header">
+                <div class="row">
+                </div>
+            </div>
+            <!-- Header END -->
+
+            <!-- footer -->
+            <div class="footer">
+                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;' % ('Code128', o.number, 400, 50)"/>
+            </div>
+            <!-- footer end -->
+
+            <div class="page">
+                <div class="oe_structure"/>
+                <div class="row">
+                    <div>
+                        <h3><center><span t-field="o.customer_id"/></center></h3>
+                    </div>
+                    <table class="table table-condensed">
+                        <tbody>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left">
+                                    <span>Type of Parking :</span>
+                                </td>
+                                <td class="text-left">
+                                    <span t-field="o.type_id"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left">
+                                    <span>Location :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.park_location_id"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left">
+                                    <span>Date :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.start_time"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left">
+                                    <span>Validity :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.end_time"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <template id="report_parking_template">
+            <t t-call="report.html_container">
+                <t t-foreach="doc_ids" t-as="doc_id">
+                    <t t-raw="translate_doc(doc_id, doc_model, 'customer_id.lang', 'spantree_logistics.report_parking_document')"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

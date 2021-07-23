@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- trip.reservation.seat -->
+        <record model='ir.ui.view' id='trip_reservation_seat_line_form_view'>
+            <field name="name">trip.reservation.seat.line.form</field>
+            <field name="model">trip.reservation.seat</field>
+            <field name="arch" type="xml">
+                <form string="Trip Configuration">
+                    <group>
+                        <field name="id" invisible="1"/>
+                        <field name="passenger_type" context="{'from_ticket_view' : True}"
+                            attrs="{'readonly':[('id', '!=', False)]}"/>
+                        <field name="no_of_seat"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='trip_reservation_seat_form_for_line_view'>
+            <field name="name">trip.reservation.seat.form</field>
+            <field name="model">trip.reservation.seat</field>
+            <field name="arch" type="xml">
+                <form string="Trip Configuration">
+                    <group>
+                        <group>
+                            <field name="reservation_id" invisible="1"/>
+                            <field name="name"/>
+                            <field name="passenger_type"
+                                    options="{'create': false, 'create_edit': false,'no_create': True}"/>
+                            <field name="source_id" invisible="1"/>
+                            <field name="dest_id" invisible="1"/>
+                            <field name="trip_id" on_change="onchange_seat_trip_fill(trip_id)"
+                                context="{'trip_lines':True, 'source_id':source_id, 'dest_id':dest_id}"
+                                options="{'create': false, 'create_edit': false,'no_create': True}" 
+                                readonly= "1"/>
+                        </group>
+                        <group>
+                            <field name="board_loc_id" domain="[('city_id','=',source_id),('capacity','=',0)]"
+                                        options="{'create': false, 'create_edit': false,'no_create': True}"/>
+                            <field name="seat_no" context="{'source_id':source_id, 'dest_id':dest_id,
+                                                        'from_trip_res':True,'seat_line_id':active_id,
+                                                        'trip_id':trip_id}"
+                                                  options="{'limit': 10, 'create': false, 'create_edit': false,'no_create': True}"/>
+                            <field name="price"/>
+                            <field name="barcode" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_update_trip" string="Save" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='trip_reservation_seat_form'>
+            <field name="name">trip.reservation.seat.form</field>
+            <field name="model">trip.reservation.seat</field>
+            <field name="arch" type="xml">
+                <form string="Trip Configuration">
+                    <group>
+                        <group>
+                            <field name="reservation_id" invisible="1"/>
+                            <field name="name"/>
+                            <field name="passenger_type"/>
+                            <field name="source_id" invisible="1"/>
+                            <field name="dest_id" invisible="1"/>
+                            <field name="trip_id" on_change="onchange_seat_trip_fill(trip_id)"
+                                context="{'trip_lines':True, 'source_id':source_id, 'dest_id':dest_id}"/>
+                        </group>
+                        <group>
+                            <field name="board_loc_id" domain="[('city_id','=',source_id),('capacity','=',0)]"/>
+                            <field name="seat_no" context="{'source_id':source_id, 'dest_id':dest_id,
+                                                        'from_trip_res':True,'seat_line_id':active_id,
+                                                        'trip_id':trip_id}"/>
+                            <field name="price"/>
+                            <field name="barcode" invisible="1"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='trip_reservation_seat_tree'>
+            <field name="name">trip.reservation.seat.tree</field>
+            <field name="model">trip.reservation.seat</field>
+            <field name="arch" type="xml">
+                <tree string="Trips">
+                    <button name="action_open_form_view" type="object" string="Edit" icon="gtk-index"/>
+                    <field name="name"/>
+                    <field name="passenger_type"/>
+                    <field name="source_id"/>
+                    <field name="dest_id"/>
+                    <field name="board_loc_id"/>
+                    <field name="trip_id"/>
+                    <field name="seat_no"/>
+                    <field name="price" sum="Total Amount"/>
+                    <field name="barcode" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='trip_reservation_seat_act'>
+            <field name="name">Trips Reservation</field>
+            <field name="res_model">trip.reservation.seat</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'from_ticket_view' : True}</field>
+        </record>
+
+        
+         <!-- Search View of fleet.trip.reservation -->
+        <record id="fleet_trip_reservation_search" model="ir.ui.view">
+            <field name="name">fleet.trip.reservation.search</field>
+            <field name="model">fleet.trip.reservation</field>
+            <field name="arch" type="xml">
+                <search>
+                   <group expand="0" string="Customer">
+                        <field name="customer_id"/>
+                   </group>
+                </search>
+            </field>
+        </record>
+        <!-- fleet.trip.reservation -->
+        <record model='ir.ui.view' id='fleet_trip_reservation_form'>
+            <field name="name">fleet.trip.reservation.form</field>
+            <field name="model">fleet.trip.reservation</field>
+            <field name="arch" type="xml">
+                <form string="Trip Reservation Form" version="7.0"> 
+                <header>
+                   <button name="make_payment" type="object" states="draft" string="Confirm &amp; Make Payment" class="oe_highlight oe_inline"/>
+                   <button name="view_invoice" string="View Invoice" type="object" class="oe_highlight" attrs="{'invisible':[('invoice_id','=',False)]}"/>
+                   <button name="print_tickets" string="Print Tickets" states="confirmed" type="object" class="oe_highlight"/>
+                   <button name="cancel_booking" states="confirmed" string="Cancel" type="object" class="oe_highlight oe_inline" confirm="Are you sure you want to cancel this trip?"/>
+                   <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_right oe_button_box">
+                        <button class="oe_inline oe_stat_button" type="object"
+                            name="stat_seats_reserved" icon="fa-building">
+                            <div>Seats<br/>Status</div>
+                        </button>
+                        <button class="oe_inline oe_stat_button" type="object"
+                            name="stat_seats_reserved" icon="fa-building" context="{'return_trip':True}">
+                            <div>Return Seats<br/>Status</div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" class="oe_inline" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group attrs="{'readonly':[('state','=','cancelled')]}">
+                        <group >
+                            <label for="source_id" string="Location From"/>
+                        <div>
+                            <field name="source_id" class="oe_inline" on_change="onchange_fill_trip(source_id,dest_id,trip_date,trip_id)" attrs="{'readonly':[('state','=','confirmed')]}"/> To <field name="dest_id" class="oe_inline" 
+                            on_change="onchange_fill_trip(source_id,dest_id,trip_date,trip_id)" attrs="{'readonly':[('state','=','confirmed')]}"/>
+                        </div>
+                            <field name="id" invisible="1"/>
+                            <field name="return_trip" on_change="onchange_fill_return_trip(source_id,dest_id,return_date,trip_date,return_trip)" 
+                                attrs="{'readonly':[('id','!=',False)]}"/>
+                            <field name="trip_date" on_change="onchange_fill_trip(source_id,dest_id,trip_date,trip_id)"
+                                required="1"/>
+                            <field name="trip_id" on_change="onchange_fill_trip_date(trip_id)" required="1" 
+                                options="{'limit': 10, 'create': false, 'create_edit': false,'no_create': True}"/>
+                            <field name="parking_loc_id" domain="[('city_id','=',source_id),('capacity','=',0)]"/>
+                            <field name="return_date" on_change="onchange_fill_return_trip(source_id,dest_id,return_date,trip_date,return_trip)"
+                                attrs="{'invisible':[('return_trip','=',False)]}"/>
+                            <field name="return_trip_id" on_change="onchange_fill_return_trip_date(return_trip_id)" attrs="{'invisible':[('return_trip','=',False)]}"
+                                options="{'limit': 10, 'create': false, 'create_edit': false,'no_create': True}"/>
+                            <field name="return_park_loc_id" domain="[('city_id','=',dest_id),('capacity','=',0)]" attrs="{'invisible':[('return_trip','=',False)]}" 
+                                options="{'limit': 10, 'create': false, 'create_edit': false,'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="cust_phone_no"/>
+                            <field name="customer_id" required="1" context="{'transport':True, 'default_phone' : cust_phone_no}" domain="[('customer','=',True)]"/>
+                            <field name="total_price" readonly="1" />
+                            <!-- <field name="fare_id" required="1"/> -->
+                            <field name="booking_date" attrs="{'invisible':[('booking_date','=',False)]}"/>
+                            <field name="booking_user" attrs="{'invisible':[('booking_user','=',False)]}"/>
+                            <field name="pricelist_id" invisible="1"/>
+                            <field name="product_id" invisible="1"/>
+                            <field name="invoice_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Seat Details">
+                            <group string="Seat Details"/>
+                            <field name="seat_ids" context="{'return_trip':return_trip, 'source_id':source_id, 'dest_id':dest_id, 'from_ticket_view' : True,
+                                                    'form_view_ref':'spantree_logistics.trip_reservation_seat_line_form_view',
+                                                    'tree_view_ref':'spantree_logistics.trip_reservation_seat_tree'}">
+                            </field>
+                        </page>
+                        <page string="Luggage Details">
+                            <group string="Luggage Details"/>
+                            <field name="luggage_ids" context="{'return_trip': return_trip, 'source_id':source_id, 'dest_id':dest_id,
+                                                                'passenger_id':customer_id, 'trip_id':trip_id,
+                                                                'return_trip_id': return_trip_id}">
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_trip_reservation_tree'>
+            <field name="name">fleet.trip.reservation.tree</field>
+            <field name="model">fleet.trip.reservation</field>
+            <field name="arch" type="xml">
+                <tree string="Trip Reservation Tree" colors="blue:(state == 'draft');black:(state == 'confirmed');red:(state == 'cancelled')">
+                    <field name="name"/>
+                    <field name="trip_id"/>
+                    <field name="source_id"/>
+                    <field name="dest_id"/>
+                    <field name="trip_date"/>
+                    <field name="customer_id"/>
+                    <field name="total_price"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_trip_reservation_act_all'>
+            <field name="name">Trip Reservation</field>
+            <field name="res_model">fleet.trip.reservation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_trip_reservation_act_in_progress'>
+            <field name="name">Trip Reservation</field>
+            <field name="res_model">fleet.trip.reservation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','draft')]</field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_trip_reservation_action_confirm'>
+            <field name="name">Trip Reservation</field>
+            <field name="res_model">fleet.trip.reservation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','in',('confirmed','cancelled'))]</field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_trip_reservation_act_form_view'>
+            <field eval="1" name="sequence"/>
+            <field name="name">Trip Reservation</field>
+            <field name="res_model">fleet.trip.reservation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <!-- fleet.trip -->
+
+        <record model='ir.ui.view' id='fleet_trip_form'>
+            <field name="name">fleet.trip.form</field>
+            <field name="model">fleet.trip</field>
+            <field name="arch" type="xml">
+                <form string="Vehicle Trip">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="route_id"/>
+                            <field name="vehicle_id"/>
+                        </group>
+                        <group>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                            <field name="server_id" invisible="1"/>
+                        </group>
+                        <div>
+                            <button name="stat_seats_reserved" string="Check States" type="object"/>
+                        </div>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_trip_tree'>
+            <field name="name">fleet.trip.tree</field>
+            <field name="model">fleet.trip</field>
+            <field name="arch" type="xml">
+                <tree string="Trips">
+                    <field name="name"/>
+                    <field name="route_id"/>
+                    <field name="start_time"/>
+                    <field name="end_time"/>
+                    <field name="vehicle_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_trip_act'>
+            <field name="name">Trips Configuration</field>
+            <field name="res_model">fleet.trip</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- fleet.trip.config -->
+        <record model='ir.ui.view' id='fleet_trip_config_form'>
+            <field name="name">fleet.trip.config.form</field>
+            <field name="model">fleet.trip.config</field>
+            <field name="arch" type="xml">
+                <form string="Trip Configuration" version="7.0">
+                    <group>
+                        <group>
+                            <field name="vehicle_id"/>
+                            <field name="route_id"/>
+                            <field name="server_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="active_status"/>
+                            <field name="trips_created_till" />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="trip_time_line">
+                            <tree editable="bottom">
+                                <field name="trip_day"/>
+                                <field name="start_hour" widget="float_time"/>
+                                <field name="travel_hour" widget="float_time" class="oe_inline" />
+                                <field name="active_status"/>
+                                <field name="server_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_trip_config_tree'>
+            <field name="name">fleet.trip.config.tree</field>
+            <field name="model">fleet.trip.config</field>
+            <field name="arch" type="xml">
+                <tree string="Trips">
+                    <field name="vehicle_id"/>
+                    <field name="route_id"/>
+                    <field name="active_status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_trip_config_act'>
+            <field name="name">Trips Configuration</field>
+            <field name="res_model">fleet.trip.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!-- trip_config_fare -->
+        <record model='ir.ui.view' id='trip_config_fare_form'>
+            <field name="name">trip.config.fare.form</field>
+            <field name="model">trip.config.fare</field>
+            <field name="arch" type="xml">
+                <form string="Trip Configuration" version="7.0">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="server_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="vehicle_id"/>
+                            <field name="route_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="fare_lines">
+                            <tree editable="top">
+                                <field name="round_trip"/>
+                                <field name="from_city" on_change="onchange_city(from_city,to_city,'from_city',parent.route_id)" context="{'from_trip_fare_config': True, 'route_id': parent.route_id}" required="1"/>
+                                <field name="to_city" on_change="onchange_city(from_city,to_city,'to_city',parent.route_id)" context="{'from_trip_fare_config': True, 'route_id': parent.route_id}" required="1"/>
+                                <field name="passenger_types" widget="many2many_tags"/>
+                                <field name="price"/>
+                                <field name="server_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='trip_config_fare_tree'>
+            <field name="name">trip.config.fare.tree</field>
+            <field name="model">trip.config.fare</field>
+            <field name="arch" type="xml">
+                <tree string="Trips">
+                    <field name="name"/>
+                    <field name="vehicle_id"/>
+                    <field name="route_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='trip_config_fare_act'>
+            <field name="name">Trips Configuration</field>
+            <field name="res_model">trip.config.fare</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- passenger.type -->
+        <record model='ir.ui.view' id='passenger_type_form'>
+            <field name="name">passenger.type.form</field>
+            <field name="model">passenger.type</field>
+            <field name="arch" type="xml">
+                <form string="Passenger Type" >
+                    <group>
+                            <field name="name"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='passenger_type_tree'>
+            <field name="name">passenger.type.tree</field>
+            <field name="model">passenger.type</field>
+            <field name="arch" type="xml">
+                <tree string="Passenger">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_company_form_inherit" model="ir.ui.view">
+            <field name="name">res.company.form.inherit</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <field name="phone" position="after">
+                    <field name="phone2"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

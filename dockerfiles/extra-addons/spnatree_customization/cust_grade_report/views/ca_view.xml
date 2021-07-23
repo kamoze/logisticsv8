@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		 <!--Grade Report Extended -->
+        <record id="individual_ca_wizard" model="ir.ui.view">
+            <field name="name">individual.ca.wizard.view</field>
+            <field name="model">individual.ca</field>
+            <field name="arch" type="xml">
+                <form string="Assessment">
+                    <group>
+                        <field name='course_id'/>
+                        <field name='session_id' domain="[('course_id', '=', course_id)]"/>
+                        <field name='sem_id' domain="[('course_id', '=', course_id),('session_id','=', session_id)]"/>
+												<field name="subject_id" domain="[('batch_id', 'in', [sem_id])]" widget="selection" required="1"/>
+                        <field name="ca_type" domain="[('ap_type', '=', 'ca')]" widget="selection" required="1"/>
+                        <!-- <field name='subject_line_ids' domain="[('batch_id', 'in', [sem_ids])]"/> -->
+                    </group>
+                    <group>
+                        <field name="sudent_ca_lines" nolable="1">
+                            <tree editable="bottom">
+                                <field name="student_id"/>
+                                <field name="obtain_marks"/>
+																<field name="assignment_sub_line_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+
+                    <footer>
+												<button string="Update Assessment" name='update_assessment_original_rec' class="oe_highlight" type='object'/>
+                        <!-- <button string="Print" name='cust_print_report' class="oe_highlight" type='object' /> -->
+                        <button string="Close" class="oe_highlight" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_individual_ca_wizard_cust" model="ir.actions.act_window">
+            <field name="name">Assessment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">individual.ca</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="individual_ca_wizard" />
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name='Update Assessment Scores' parent='openeducat_ext.menu_op_gradepoint_main'
+            action='action_individual_ca_wizard_cust' id='cust_menu_individua_ca_wizard'/>
+	</data>
+</openerp>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- invoice view for m.t -->
+        <record id="act_transfer_2_invoice" model="ir.actions.act_window">
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="name">Invoices</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('money_transfer_id','=',active_id)]</field>
+            <field name="context">{'search_default_money_transfer_id': [active_id], 'default_money_transfer_id': active_id}</field>
+        </record>
+
+        <!-- money.transfer.charge -->
+        <record model="ir.ui.view" id="view_money_transfer_charge_form">
+            <field name="name">view.money.transfer.charge.form</field>
+            <field name="model">money.transfer.charge</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Money Transfer Charge" editable="bottom">
+                    <field name="amt_from" />
+                    <field name="amt_to" />
+                    <field name="amt_charged" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_money_transfer_charge">
+            <field name="name">Money Transfer Charge</field>
+            <field name="res_model">money.transfer.charge</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <!-- fleet.money.transfer -->
+        <record model="ir.ui.view" id="view_money_transfer_form">
+            <field name="name">view.money.transfer.form</field>
+            <field name="model">fleet.money.transfer</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Money Transfer">
+                    <header>
+                        <button name="make_payment" states="draft" type="object" string="Make Payment" class="oe_highlight"/>
+                        <button name="action_view_invoice" string="View Invoice" type="object" class="oe_highlight" attrs="{'invisible': [('invoice_id', '=', False)]}"/>
+                        <button name="pay_amount" states="receive" string="Pay Amount" type="object" confirm="Are you sure you want to pay this amount?" class="oe_highlight"/>
+<!--                         <button name="action_view_refund" states="receive" string="View Refund" type="object" />-->
+                        <button name="action_transfer_cancel" states="draft" string="Cancel" type="object" />
+                        <!-- <button name="%(act_transfer_2_invoice)d" string="View Invoices" type="action" states="receive,paid"/> -->
+                        <field name="state" widget='statusbar' statusbar_visible="draft,receive,paid"/>
+                    </header>
+                    <sheet>
+                        <group col="2">
+                            <group string="Customer Details">
+                                <field name="date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="existing_cust" attrs="{'readonly':[('state', '=', 'cancel')]}"/>
+                                <field name="cust_id" attrs="{'invisible': [('existing_cust', '=', False)], 'readonly':[('state', '!=', 'draft')]}" domain="[('customer','=',True)]"/>
+                                <field name="cust_name" attrs="{'invisible': [('existing_cust', '=', True)], 'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="cust_city_id"/>
+                                <field name="receiver_id" attrs="{'readonly':[('state', '!=', 'draft')]}" domain="[('customer','=',True)]"/>
+                                <field name="rec_city_id"/>
+                                <field name="invoice_id" invisible="1"/>
+                            </group>
+                            <group string="Payment Details">
+                                <field name="is_diff_currency"/>
+                                <field name="currency_id" attrs="{'invisible': [('is_diff_currency', '=', False)],'required': [('is_diff_currency', '=', True)]}"/>
+                                <field name="currency_rate" attrs="{'invisible': [('is_diff_currency', '=', False)],'required': [('is_diff_currency', '=', True)]}"/>
+                                <field name="payment_mode" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="cheque_no" attrs="{'invisible': [('payment_mode', '!=', 'bank')], 'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="amount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="based_on" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="charge_percentage" attrs="{'invisible': [('based_on', '!=', 'percentage')], 'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="charge_fixed" attrs="{'invisible': [('based_on', '!=', 'fixed')], 'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="charges"/>
+                                <field name="final_amount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="signature" attrs="{'invisible': [('state', 'in', ('draft', 'receive', 'cancel'))]}" widget="signature"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Transfer Documents">
+                                <field name="document_ids" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </page>
+                            <page string="Transfer No.">
+                                <h1>
+                                    <label string="Transfer "/>
+                                    <field name="name" class="oe_inline" readonly="1"/>
+                                </h1>
+                                <group>
+                                    <field name="recieving_user" widget="selection"/>
+                                    <field name="paying_user" widget="selection"/>
+                                </group>
+                                
+                            </page>
+                            <page string="Notes">
+                                <field name="note" nolabel="1"/>
+                            </page>
+                            <page string="Reason For Cancel" attrs="{'invisible': [('state', '!=', 'cancel')]}">
+                                <field name="reason"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_money_transfer_tree">
+            <field name="name">view.money.transfer.tree</field>
+            <field name="model">fleet.money.transfer</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Money Transfer" colors="#7e7e7e:(state == 'draft');red:(state == 'cancel');#52bab3:(state == 'receive');#e67478:(state == 'paid');">
+                    <field name="name" invisible="1"/>
+                    <field name="cust_id"/>
+                    <field name="cust_name"/>
+                    <field name="date"/>
+                    <field name="payment_mode"/>
+                    <field name="amount"/>
+                    <field name="final_amount"/>
+                    <field name="cust_city_id"/>
+                    <field name="rec_city_id"/>
+                    <field name="receiver_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_money_transfer_document_tree">
+            <field name="name">view.money.transfer.document.tree</field>
+            <field name="model">fleet.money.document</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Money Document" editable="bottom">
+                    <field name="name"/>
+                    <field name="document"/>
+                    <field name="transfer_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_money_transfer">
+            <field name="name">Money Transfer</field>
+            <field name="res_model">fleet.money.transfer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_money_transfer_form_view">
+            <field eval="1" name="sequence"/>
+            <field name="name">Money Transfer</field>
+            <field name="res_model">fleet.money.transfer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+    </data>
+</openerp>

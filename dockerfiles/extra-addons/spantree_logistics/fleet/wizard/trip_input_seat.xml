@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- trip.input.seat-->
+        <record id="trip_input_form" model="ir.ui.view">
+            <field name="name">trip.input.form</field>
+            <field name="model">trip.input.seat</field>
+            <field name="arch" type="xml">
+              <form string="Trip Input Seat Wizard">
+                  <group string="Input Seats">
+                      <field name="passenger_type" />
+                      <field name="no_of_seat"/>
+                      <field name="total_seats" widget="many2many_checkboxes" invisible="1"/>
+                      <!-- <field name="seat_nos"/> -->
+                  </group>
+                  <footer>
+                      <button name="reserve_seats" string="Save Seats" type="object" class="oe_highlight"/>
+                      <!-- <button name="reserve_seats_new" string="Save and New" type="object" class="oe_highlight"/> -->
+                      or
+                      <button string="Cancel" class="oe_link" special="cancel" />
+                  </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="trip_input_act" model="ir.actions.act_window">
+            <field name="name">Trip Input Seat</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">trip.input.seat</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

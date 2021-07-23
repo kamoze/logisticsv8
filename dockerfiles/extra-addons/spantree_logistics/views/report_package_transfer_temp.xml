@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="report_package_transfer_document">
+            <!-- Header -->
+            <div class="header">
+                <div class="row">
+                </div>
+            </div>
+            <!-- Header END -->
+
+            <!-- footer -->
+            <div class="footer">
+                <center>
+                    <t t-esc="o.package_barcode"/>
+                </center>
+                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;' % ('Code128', o.package_barcode, 500, 50)"/>
+            </div>
+            <!-- footer end -->
+
+            <div class="page">
+                <div class="oe_structure"/>
+                <div class="row">
+                    <h3><center><span t-field="o.name"/></center></h3>
+                    <table width="100%%">
+                        <tbody>
+                            <tr style="font-size: 12px;">
+                                <td class="text-left" width="30%">
+                                    <span>Date :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.date"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 12px;">
+                                <td class="text-left" width="30%">
+                                    <span>Receiver :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.receiver_id"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 12px;">
+                                <td class="text-left" width="30%">
+                                    <span>Origin :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.source_loc_id"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 12px;">
+                                <td class="text-left" width="30%">
+                                    <span>Destination :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.dest_loc_id"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 12px;">
+                                <td class="text-left" width="30%">
+                                    <span>Name of Package:</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.package_name"/>
+                                </td>
+                            </tr>
+                            <t t-if="o.fleet_id">
+                            <tr style="font-size: 12px;">
+                                <td class="text-left" width="30%">
+                                    <span>Vehicle:</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.fleet_id.name"/>
+                                </td>
+                            </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <template id="report_package_transfer_temp">
+            <t t-call="report.html_container">
+                <t t-foreach="doc_ids" t-as="doc_id">
+                    <t t-raw="translate_doc(doc_id, doc_model, 'sender_id.lang', 'spantree_logistics.report_package_transfer_document')"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

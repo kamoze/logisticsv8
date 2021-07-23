@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- wizard.trip.board -->
+        <record id="trip_board_wizard_form" model="ir.ui.view">
+            <field name="name">wizard.trip.board.form</field>
+            <field name="model">wizard.trip.board</field>
+            <field name="arch" type="xml">
+                <form string="Trip Board Wizard">
+                    <group>
+                        <field name="tickets_boards" />
+                    </group>
+                    <footer>
+                        <button name="prepare_trip_boarding" string="Prepare Trip Boarding" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="trip_board_wizard_act" model="ir.actions.act_window">
+            <field name="name">Trip Board Booking Seat</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.trip.board</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- trip.board.passenger -->
+        <record id="trip_board_passenger_form" model="ir.ui.view">
+            <field name="name">trip.board.passenger.form</field>
+            <field name="model">trip.board.passenger</field>
+            <field name="arch" type="xml">
+                <form string="Trip Board Passenger">
+                <header>
+                    <button name="verify" type="object" states="new" string="Verify &amp; Departure" class="oe_highlight oe_inline"/>
+                    <button name="close" type="object" states="verified" string="Close" class="oe_highlight oe_inline"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                    <sheet>
+	                    <group>
+	                        <field name="trip_id" attrs="{'readonly': [('state', '=', 'closed')]}"/>
+	                        <field name="employee_id" attrs="{'readonly': [('state', '=', 'closed')]}"/>
+                            <field name="vehicle_id" attrs="{'readonly': [('state', '=', 'closed')]}"/>
+	                    </group>
+	                    <notebook>
+	                        <page string="Passenger List">
+	                            <group string="Passenger List"/>
+		                        <field name="reservation_seat_ids" attrs="{'readonly': [('state', '=', 'closed')]}" context="{'trip_id': trip_id}">
+		                            <tree string="Passenger List" editable="bottom">
+		                                <field name="partner_id" required="1" domain="[('customer','=',True)]"/>
+		                                <field name="passenger_type"/>
+		                                <field name="source_id"/>
+		                                <field name="dest_id"/>
+		                                <field name="board_loc_id" domain="[('city_id','=',source_id),('capacity','=',0)]"/>
+		                                <field name="trip_id" context="{'from_boarding_line': True, 'trip_id': trip_id}"/>
+		                                <field name="seat_no" context="{'source_id':source_id, 'dest_id':dest_id,
+		                                                        'from_boarding_line':True, 'trip_id':trip_id}"/>
+		                                <field name="price" sum="Total Amount"/>
+		                                <field name="is_board"/>
+		                                <field name="is_verified" invisible="1"/>
+		                                <field name="barcode" invisible="1"/>
+		                            </tree>
+		                        </field>
+	                        </page>
+	                        <page string="Luggage Details">
+	                            <group string="Luggage Details"/>
+	                            <field name="luggage_ids" attrs="{'readonly': [('state', '=', 'closed')]}">
+	                                <tree string="Luggage Details" editable="bottom">
+					                    <field name="reservation_id" invisible="1"/>
+					                    <field name="trip_id"/>
+					                    <field name="passenger_id"/>
+					                    <field name="luggage_name"/>
+					                    <field name="source_id"/>
+					                    <field name="destination_id"/>
+					                    <field name="charge"/>
+					                    <field name="weight" attrs="{'invisible': [('charge', '=', 'fixed')]}"/>
+					                    <field name="rate"/>
+					                    <field name="total" sum="total"/>
+					                    <field name="invoice_id" invisible="1"/>
+					                    <field name="luggage_line_id" invisible="1"/>
+					                    <field name="board_chart_id" invisible="1"/>
+					                </tree>
+	                            </field>
+	                        </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- trip.board.passenger -->
+        <record id="trip_board_passenger_tree" model="ir.ui.view">
+            <field name="name">trip.board.passenger.form</field>
+            <field name="model">trip.board.passenger</field>
+            <field name="arch" type="xml">
+                <tree string="Trip Board Passenger">
+                    <field name="trip_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='trip_board_passenger_action'>
+            <field name="name">Trip Boarding Chart</field>
+            <field name="res_model">trip.board.passenger</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model='ir.ui.view' id='trip_passenger_board_line_tree'>
+            <field name="name">trip.passenger.board.line.tree</field>
+            <field name="model">trip.passenger.board.line</field>
+            <field name="arch" type="xml">
+                <tree string="Trips">
+                    <field name="partner_id"/>
+                    <field name="passenger_type"/>
+                    <field name="source_id"/>
+                    <field name="dest_id"/>
+                    <field name="board_loc_id"/>
+                    <field name="trip_id" context="{'from_boarding_line': True, 'trip_id': trip_id}"/>
+                    <field name="seat_no"/>
+                    <field name="price" sum="Total Amount"/>
+                    <field name="is_board"/>
+                    <field name="is_verified"/>
+                    <field name="barcode" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='trip_passenger_board_line_form_view'>
+            <field name="name">trip.passenger.board.line.form</field>
+            <field name="model">trip.passenger.board.line</field>
+            <field name="arch" type="xml">
+                <form string="Trip Configuration">
+                    <group>
+                        <group>
+                            <field name="reservation_id" invisible="1"/>
+                            <field name="partner_id"/>
+                            <field name="passenger_type"/>
+                            <field name="source_id" />
+                            <field name="dest_id" />
+                            <field name="trip_id"/>
+                        </group>
+                        <group>
+                            <field name="board_loc_id"/>
+                            <field name="seat_no"/>
+                            <field name="price"/>
+                            <field name="barcode" invisible="1"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_student_assessment_line_new_user,name_student_assessment_line_new,cust_grade_report.model_student_assessment_line_new,base.group_user,1,0,0,0
+
+access_student_assessment_line_new_parent,name_student_assessment_line_new,cust_grade_report.model_student_assessment_line_new,openeducat_erp.group_op_parent,1,1,0,0
+
+access_student_faculty,name_student_assessment_line_new,cust_grade_report.model_student_assessment_line_new,openeducat_erp.group_op_faculty,1,1,1,1
+access_faculty_custed_grade,name_exam_score_lines,cust_grade_report.model_exam_score_lines,openeducat_erp.group_op_faculty,1,1,1,1

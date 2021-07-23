@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- hr_employee form -->
+        <record id="view_employee_form_transport" model="ir.ui.view">
+            <field name="name">hr.employee.form.ace</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <field name="bank_account_id" position="after">
+                    <field name="license_no"/>
+                </field>
+                <group string="Active" position="after">
+                    <group string="Experience">
+                        <field name="experience"/>
+                    </group>
+                </group>
+                <notebook position="inside">
+                    <page string="Documents">
+                        <group string="Attached Documents" />
+                            <field name="emp_documents">
+                            <tree>
+                                <field name="name"/>
+                                <field name="document"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="document"/>
+                                </group>
+                            </form>
+                            </field>
+                    </page>
+                    <page string="Work History">
+                        <group string="Work History" />
+                            <field name="history_ids">
+                            <tree>
+                                <field name="old_company_name"/>
+                                <field name="exp_months"/>
+                                <field name="salary"/>
+                                <field name="ref_name"/>
+                                <field name="contact_no"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <group>
+                                        <field name="old_company_name"/>
+                                        <field name="exp_months"/>
+                                    </group>
+                                    <group>
+                                        <field name="salary"/>
+                                        <field name="ref_name"/>
+                                        <field name="contact_no"/>
+                                    </group>
+                                </group>
+                            </form>
+                            </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</openerp>

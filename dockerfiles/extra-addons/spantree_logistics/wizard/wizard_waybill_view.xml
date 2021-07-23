@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="pakage_waybill_wizard_form_view" model="ir.ui.view">
+            <field name="name">Waybill form</field>
+            <field name="model">wizard.waybill</field>
+            <field name="arch" type="xml">
+                <form string="Waybill">
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                        </group>
+                        <group>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="driver_id" style="width:40%"/>
+                    </group>
+                    <footer>
+                       <button name="get_data" string="Print" type="object" class="oe_highlight"/>
+                       or
+                       <button string="Cancel" class="oe_link" special="cancel" />
+                   </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_waybill_wizard" model="ir.actions.act_window">
+            <field name="name">Waybill</field>
+            <field name="res_model">wizard.waybill</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Way Bill" parent="transport_service" id="print_package_waybill"
+        action="action_waybill_wizard" groups="group_package_user"/>
+
+
+    </data>
+</openerp>

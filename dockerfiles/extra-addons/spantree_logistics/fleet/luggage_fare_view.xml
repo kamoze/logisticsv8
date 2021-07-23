@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Tree view of Package Fare -->
+        <record model="ir.ui.view" id="view_luggage_fare_tree">
+            <field name="name">view.luggage.fare.tree</field>
+            <field name="model">luggage.fare</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Luggage Fare" editable="top">
+                    <field name="source_id"/>
+                    <field name="dest_id"/>
+                    <field name="rate"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_luggage_fare">
+            <field name="name">Luggage Fare</field>
+            <field name="res_model">luggage.fare</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record model='ir.ui.view' id='luggage_details_form_view'>
+            <field name="name">trip.luggage.form.view</field>
+            <field name="model">trip.luggage</field>
+            <field name="arch" type="xml">
+                <form string="Luggage Details">
+                    <group>
+                        <group>
+                            <field name="reservation_id" invisible="1"/>
+                            <field name="trip_id" context="{'from_luggage':True, 'return':parent.return_trip,'trip_id':parent.trip_id, 'return_trip_id':parent.return_trip_id}" required="1"/>
+                            <field name="passenger_id" required="1"/>
+                            <field name="luggage_name" required="1"/>
+                            <field name="source_id" context="{'from_luggage':True,'destination_id':destination_id,'source_id':source_id}" required="1"/>
+                            <field name="destination_id" context="{'from_luggage':True,'destination_id':destination_id,'source_id':source_id}" required="1"/>
+                            <field name="seat_id" required="1"
+                                    options="{'create': false, 'create_edit': false,'no_create': True}"
+                                    context="{'from_luggage':True,'dest_id':destination_id,'source_id':source_id,'trip_id':trip_id, 'booking_number':parent.name}"/>
+                        </group>
+                        <group>
+                            <field name="charge" required="1"/>
+                            <field name="weight" attrs="{'invisible': [('charge', '!=', 'weight')]}"/>
+                            <field name="rate" attrs="{'invisible': [('charge', '!=', 'weight')]}"/>
+                            <field name="total"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='luggage_details_tree_view'>
+            <field name="name">trip.luggage.tree.view</field>
+            <field name="model">trip.luggage</field>
+            <field name="arch" type="xml">
+                <tree string="Luggage Details">
+                    <field name="reservation_id" invisible="1"/>
+                    <field name="trip_id"/>
+                    <field name="passenger_id"/>
+                    <field name="seat_id"/>
+                    <field name="luggage_name"/>
+                    <field name="source_id"/>
+                    <field name="destination_id"/>
+                    <field name="charge"/>
+                    <field name="weight" attrs="{'invisible': [('charge', '!=', 'weight')]}"/>
+                    <field name="rate" attrs="{'invisible': [('charge', '!=', 'weight')]}"/>
+                    <field name="total" sum="Total"/>
+                    <field name="invoice_id" invisible="1"/>
+                    <button name="make_payment" type="object" string="Create Invoice" context="{'from_trip_luggage': True}" attrs="{'invisible': [('invoice_id', '!=', False)]}" icon="STOCK_EDIT"/>
+                    <button name="print_invoice" type="object" string="Print Invoice" attrs="{'invisible': [('invoice_id', '=', False)]}" icon="STOCK_PRINT"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='action_luggage_details'>
+            <field name="name">Luggage Details</field>
+            <field name="res_model">trip.luggage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</openerp>

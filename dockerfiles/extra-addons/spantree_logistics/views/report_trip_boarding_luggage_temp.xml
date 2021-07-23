@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <template id="trip_boarding_luggage_document">
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;"/>
+                    </div>
+                    <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1"/>
+                </div>
+                <div class="row zero_min_height">
+                    <div class="col-xs-12">
+                        <div style="border-bottom: 1px solid black;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="text-center" style="border-top: 1px solid black;">
+                    <ul t-if="not company.custom_footer" class="list-inline">
+                        <li t-if="company.phone">Phone: <span t-field="company.phone"/></li>
+                        <li t-if="company.fax and company.phone">&amp;bull;</li>
+                        <li t-if="company.fax">Fax: <span t-field="company.fax"/></li>
+                        <li t-if="company.email">&amp;bull;</li>
+                        <li t-if="company.email">Email: <span t-field="company.email"/></li>
+                        <li t-if="company.website">&amp;bull;</li>
+                        <li t-if="company.website">Website: <span t-field="company.website"/></li>
+                    </ul>
+                    <t t-if="company.custom_footer">
+                        <span t-raw="company.rml_footer"/>
+                    </t>
+                    <ul class="list-inline">
+                        <li>Page:</li>
+                        <li><span class="page"/></li>
+                        <li>/</li>
+                        <li><span class="topage"/></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page">
+                <div class="oe_structure"/>
+                <div class="row">
+                    <center>
+                        <h3>
+                            <span t-field="o.trip_id"/>
+                        </h3>
+                    </center>
+                    <table style="border: 1px solid black;width:100%;padding:20px;">
+                        <thead style="border: 1px solid black;">
+                            <tr>
+                                <th class="text-center" style="border: 1px solid lightgrey;">Report Printed</th>
+                                <th class="text-center" style="border: 1px solid lightgrey;">Origin</th>
+                                <th class="text-center" style="border: 1px solid lightgrey;">Destination</th>
+                                <th class="text-center" style="border: 1px solid lightgrey;">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <tr style="border: 1px solid black;border: 1px solid lightgrey;">
+                                <td class="text-center" style="border: 1px solid lightgrey;">
+                                    <span t-esc="get_date()"/>
+                                </td>
+                                <td class="text-center" style="border: 1px solid lightgrey;">
+                                    <span t-field="o.trip_id.route_id.city_source.name"/>
+                                </td>
+                                <td class="text-center" style="border: 1px solid lightgrey;">
+                                    <span t-field="o.trip_id.route_id.city_destination.name"/>
+                                </td>
+                                <td class="text-center" style="border: 1px solid lightgrey;">
+                                    <span t-field="o.trip_id.start_time"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-condensed" style="margin-top:20px;">
+                        <thead>
+                            <tr>
+                                <th>Trip</th>
+                                <th>Passenger Name</th>
+                                <th>Luggage Disc.</th>
+                                <th>Source City</th>
+                                <th>Destination City</th>
+                                <th>Charge</th>
+                                <th>Weight</th>
+                                <th>Rate</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <t t-set="grand_total" t-value="0" />
+                            <tr t-as="p" t-foreach="get_board_pass_luggage_list(o)">
+                                <td>
+                                    <span t-esc="p['trip_name']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p['pass_name']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p['luggage_detail']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p['source_id']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p['dest_id']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p['charge']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p['weight']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p['rate']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p['total']"/>
+                                    <t t-set="grand_total" t-value="grand_total+p['total']" />
+                                </td>
+                            </tr>
+                            <tr class='border-black' style="border-bottom: 1px solid black;">
+                                <td colspan='8'></td>
+                                <td><strong><span t-esc="grand_total" /></strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table style="padding:20px;margin-top:20px;">
+                        <tr>
+                            <td>
+                                <strong><span>Vehicle Name : </span></strong>
+                                <span t-field="o.vehicle_id.name"/>
+                                <strong><span style="padding-left:10px;">Vehicle No. : </span></strong>
+                                <span t-field="o.vehicle_id.license_plate"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong><span>Driver Name : </span></strong>
+                                <span t-field="o.employee_id"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </template>
+        <template id="report_trip_boarding_luggage_temp">
+            <t t-call="report.html_container">
+                <t t-as="doc_id" t-foreach="doc_ids">
+                    <t t-raw="translate_doc(doc_id, doc_model, 'trip_id.name', 'spantree_logistics.trip_boarding_luggage_document')"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

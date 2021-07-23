@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <template id="report_order_analysis_template">
+        	 <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                	<t t-call="report.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+                <div class="row">
+                    <center>
+                        <h3>
+                            Order Analysis Report <span t-if="get_date(o) != False"> From </span><span t-esc="get_date(o)"/> <span t-if="get_end_date(o) != False"> To </span><span t-esc="get_end_date(o)"/>
+                        </h3>
+                    </center>
+                    <t t-if="get_trip_context() == True">
+                    <h3> Daily Trip</h3>
+                    <table class="table table-condensed" style="margin-top:20px;">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Passenger Type</th>
+                                <th>Origin</th>
+                                <th>Destination</th>
+                                <th class="text-right">Seat Booked</th>
+                                <th class="text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <tr t-as="res" t-foreach="get_trips(o)">
+                                <td>
+                                    <span t-esc="res['type']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="res['passenger_type']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="res['origin']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="res['destination']"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="res['ticket']"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="res['amount']"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">
+                                <t t-if="get_trips_total(o)">
+                                    <b>Total : </b><span t-esc="get_trips_total(o)"/>
+                                </t>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table><br/><br/>
+                    </t>
+                    <t t-if="get_parking_context() == True">
+                    <h3> Parking </h3>
+                    <table class="table table-condensed" style="margin-top:20px;">
+                        <thead>
+                            <tr>
+                                <th>Location</th>
+                                <th class="text-right">Total Charge</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <tr t-as="parking" t-foreach="get_parking(o)">
+                                <td>
+                                    <span t-esc="parking['location_name']"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="parking['price']"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            <td></td>
+                            <td class="text-right">
+                                <t t-if="get_parking_total(o)">
+                                    <b>Total : </b><span t-esc="get_parking_total(o)"/>
+                                </t>
+                            </td>
+                            </tr> 
+                        </tbody>
+                    </table><br/><br/>
+                    </t>
+                    <t t-if="get_money_context() == True">
+                    <h3> Money Transfer </h3>
+                    <table class="table table-condensed" style="margin-top:20px;">
+                        <thead>
+                            <tr>
+                                <th>Origin</th>
+                                <th>Destination</th>
+                                <th class="text-right">Amount To Transfer</th>
+                                <th class="text-right">Charges</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <tr t-as="money" t-foreach="get_money_transfer(o)">
+                                <td>
+                                    <span t-esc="money['origin']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="money['destination']"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="money['amount_to_transfer']"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="money['charges']"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">
+                                <t t-if="get_money_transfer_total(o)">
+                                    <b>Total : </b><span t-esc="get_money_transfer_total(o)"/>
+                                </t>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table><br/><br/>
+                    </t>
+                    <t t-if="get_package_context() == True">
+                    <h3> Package Transfer </h3>
+                    <table class="table table-condensed" style="margin-top:20px;">
+                        <thead>
+                            <tr>
+                                <th>Origin</th>
+                                <th>Destination</th>
+                                <th class="text-right">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <tr t-as="package" t-foreach="get_package(o)">
+                                <td>
+                                    <span t-esc="package['origin']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="package['destination']"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="package['price']"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">
+                                <t t-if="get_package_total(o)">
+                                    <b>Total : </b><span t-esc="get_package_total(o)"/>
+                                </t>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </t>
+                    <t t-if="get_package_context() == True and get_money_context() == True and get_parking_context() == True and get_trip_context() == True">
+                    <table>
+                        <div class="text-right"> <b>Grand Total : </b> <span t-esc="get_grand_total(o)"/></div>
+                    </table>
+                    </t>
+	            </div>
+	            </div>
+           </t>
+           </t>
+           </t>
+        </template>
+    </data>
+</openerp>

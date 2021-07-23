@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- fleet.vehicle form -->
+        <record model='ir.ui.view' id='fleet_vehicle_form_transport'>
+            <field name="name">fleet.vehicle.form.transport</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_form"/>
+            <field name="arch" type="xml">
+                <field name="driver_id" position="before">
+                    <field name="is_leasable"/>
+                    <field name="vehicle_type"/>
+                    <field name="employee_driver_id"/>
+                </field>
+                <group string="Additional Properties" position="replace"/>
+                <group string="Engine Options" position="replace"/>
+                <sheet position="inside">
+                    <notebook>
+                        <page string="General">
+                            <group>
+                                <group string="Additional Properties">
+                                    <field name="seats"/>
+                                    <field name="doors"/>
+                                    <field name="color"/>
+                                </group>
+                                <group string="Engine Options">
+                                    <field name="transmission"/>
+                                    <field name="fuel_type"/>
+                                    <label for="co2"/>
+                                    <div>
+                                        <field name="co2" class="oe_inline"/>
+                                        g/km
+                                    </div>
+                                    <field name="horsepower"/>
+                                    <field name="horsepower_tax"/>
+                                    <label for="power"/>
+                                    <div>
+                                        <field name="power" class="oe_inline"/>
+                                        kW
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <notebook position="inside">
+                    <page string="Seat Numbers">
+                        <group>
+                            <group>
+                                <field name="seat_prefix"/>
+                                <field name="no_of_seat"/>
+                            </group>
+                            <group>
+                                <field name="seat_active"/>
+                                <button string="Generate Seat No.s" type="object"
+                                    name="generate_seats"></button>
+                            </group>
+                        </group>
+                        <div>
+                            <h2>
+                                <label for="seat_nos"/>
+                            </h2>
+                            <field name="seat_nos"/>
+                        </div>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <!-- fleet.vehicle.type -->
+        <record model='ir.ui.view' id='fleet_vehicle_type_form_transport'>
+            <field name="name">fleet.vehicle.type.form.transport</field>
+            <field name="model">fleet.vehicle.type</field>
+            <field name="arch" type="xml">
+                <form string="Vehicle Type" version="7.0">
+                    <group>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group string="Description"/>
+                    <field name="description" class="oe_edit_only"/>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_vehicle_type_tree_transport'>
+            <field name="name">fleet.vehicle.type.tree.transport</field>
+            <field name="model">fleet.vehicle.type</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_vehicle_type_act'>
+            <field name="name">Vehicle Type</field>
+            <field name="res_model">fleet.vehicle.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+            <!-- fleet.route.point -->
+        <record model='ir.ui.view' id='fleet_route_point_form_transport'>
+            <field name="name">fleet.route.point.transport.form</field>
+            <field name="model">fleet.route.point</field>
+            <field name="arch" type="xml">
+                <form string="Route Points" version="7.0">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="city_id"/>
+                            <field name="sequence_no"/>
+                        </group>
+                        <group>
+                            <field name="arrival_time"/>
+                            <field name="departure_time"/>
+                            <field name="hold_time"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_route_point_tree_transport'>
+            <field name="name">fleet.route.point.transport.tree</field>
+            <field name="model">fleet.route.point</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="city_id"/>
+                    <field name="sequence_no"/>
+                    <field name="arrival_time"/>
+                    <field name="departure_time"/>
+                    <field name="hold_time"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- account.asset -->
+        <record model="ir.ui.view" id="view_account_asset_asset_form_transport">
+            <field name="name">account.asset.asset.form.transport</field>
+            <field name="model">account.asset.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <field name="purchase_date" position="after">
+                    <field name="fleet_id"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- fleet.route -->
+        <record model="ir.ui.view" id="fleet_route_search_view">
+            <field name="name">fleet.route.search.view</field>
+            <field name="model">fleet.route</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="name"/>
+                    <field name="city_source"/>
+                    <field name="city_destination"/>
+                </search>
+            </field>
+        </record>
+        
+        <record model='ir.ui.view' id='fleet_route_form_transport'>
+            <field name="name">fleet.route.form.transport</field>
+            <field name="model">fleet.route</field>
+            <field name="arch" type="xml">
+                <form string="Routes" version="7.0">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="route_name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" class="oe_inline"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="city_source"/>
+                            </group>
+                            <group>
+                                <field name="city_destination"/>
+                            </group>
+                        </group>
+                        <group string="Route Points"/>
+                        <field name="route_point_ids">
+                            <tree delete="false" select="false" editable="bottom" >
+                                <field name="city_id"/>
+                                <field name="sequence_no"/>
+                                <field name="hold_time"/>
+                                <field name="arrival_time"/>
+                                <field name="departure_time"/>
+                                <field name="name"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_route_tree_transport'>
+            <field name="name">fleet.route.tree.transport</field>
+            <field name="model">fleet.route</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="city_source"/>
+                    <field name="city_destination"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_route_act'>
+            <field name="name">Fleet Routes</field>
+            <field name="res_model">fleet.route</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- fleet.city -->
+                <!-- fleet.vehicle.type -->
+        <record model='ir.ui.view' id='fleet_city_form_transport'>
+            <field name="name">fleet.city.form.transport</field>
+            <field name="model">fleet.city</field>
+            <field name="arch" type="xml">
+                <form string="City" version="7.0">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="state_id"/>
+                            <field name="server_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="country_id"/>
+                            <field name="post_code"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_city_tree_transport'>
+            <field name="name">fleet.city.tree.transport</field>
+            <field name="model">fleet.city</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="name"/>
+                    <field name="state_id"/>
+                    <field name="country_id"/>
+                    <field name="post_code"/>
+                    <field name="server_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_city_act'>
+            <field name="name">Manage Cities</field>
+            <field name="res_model">fleet.city</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model='ir.actions.act_window' id='service_button_form_view_action'>
+            <field name="name">Service</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.button</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+        <record id="view_company_form_inherit" model="ir.ui.view">
+            <field name="name">res.country.state.form.inherit</field>
+            <field name="model">res.country.state</field>
+            <field name="inherit_id" ref="base.view_country_state_form"/>
+            <field name="arch" type="xml">
+                <field name="country_id" position="after">
+                    <field name="server_id" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='trip_config_passenger_type_tree'>
+            <field name="name">Passenger Type</field>
+            <field name="model">passenger.type</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='trip_config_passenger_type_act'>
+            <field name="name">Passenger Type</field>
+            <field name="res_model">passenger.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <!-- MENUS -->
+        <menuitem id="transport_main_menu" name="Transport" action="service_button_form_view_action" groups="group_transport_admin,group_trip_booking_user,group_money_transfer_user,group_parking_user,group_package_user,group_cashier_user,group_vehicle_booking_user"/>
+
+        <!-- Vehicles menus -->
+        <menuitem name=" " parent="transport_main_menu" id="side_transport_vehicles"
+            sequence="2" groups="fleet.group_fleet_user,group_transport_admin,group_trip_booking_user,group_money_transfer_user,group_parking_user,group_package_user,group_vehicle_booking_user"/>
+        <menuitem name="Vehicles" parent="side_transport_vehicles" id="transport_vehicles"
+            sequence="2" groups="fleet.group_fleet_user"/>
+        <menuitem id="assets_sub_menu" name="Assets" parent="transport_vehicles"
+            action="account_asset.action_account_asset_asset_form"/>
+        <menuitem action="fleet.fleet_vehicle_act" parent="transport_vehicles"
+            id="transport_vehicle_menu" groups="fleet.group_fleet_user"/>
+        <menuitem action="fleet.fleet_vehicle_odometer_act" parent="transport_vehicles"
+            id="transport_odometer_menu" groups="fleet.group_fleet_user"/>
+        <menuitem action="fleet.fleet_vehicle_log_fuel_act" parent="transport_vehicles"
+            id="transport_vehicle_log_fuel_menu" groups="fleet.group_fleet_user"/>
+        <menuitem action="fleet.fleet_vehicle_log_services_act" parent="transport_vehicles"
+            id="transport_vehicle_log_services_menu" groups="fleet.group_fleet_user"/>
+
+        <!-- Employees Menus -->
+        <menuitem name=" " parent="transport_main_menu" id="side_transport_employees"
+            sequence="2" groups="fleet.group_fleet_user"/>
+        <menuitem name="Employees" parent="side_transport_employees"
+            id="transport_employee" sequence="2" groups="fleet.group_fleet_user"/>
+        <menuitem action="hr.open_view_employee_list_my" id="transport_employee_list"
+            sequence="3" parent="transport_employee"/>
+        <menuitem parent="transport_employee" id="transport_leave_request"
+            action="hr_holidays.open_ask_holidays"/>
+        <menuitem action="hr_expense.expense_all" id="transport_expense_all"
+            name="Expenses" parent="transport_employee"/>
+
+        <!-- Service Menus -->
+        <menuitem name=" " parent="transport_main_menu" id="side_transport_services"
+            sequence="3" groups="group_vehicle_booking_user,group_transport_admin,group_trip_booking_user,group_money_transfer_user,group_parking_user,group_package_user,group_cashier_user"/>
+
+        <menuitem name="Services" parent="side_transport_services" id="transport_service"
+            sequence="1" groups="group_vehicle_booking_user,group_transport_admin,group_trip_booking_user,group_money_transfer_user,group_parking_user,group_package_user,group_cashier_user"/>
+
+        <menuitem name="Parking" action="fleet_parking_act" parent="transport_service"
+            id="transport_parking" sequence="1" groups="group_parking_user"/>
+
+        <menuitem name="Parking Pass" action="fleet_parking_pass_act"
+            parent="transport_service" id="transport_parking_pass" sequence="1"
+            groups="group_parking_user"/>
+
+        <menuitem name="Daily Trip Booking" parent="transport_service"
+            id="transport_trip" sequence="1" groups="group_trip_booking_user"/>
+
+        <menuitem name="Create Trips" action="fleet_trip_reservation_act_in_progress"
+            parent="transport_trip" id="transport_trip_in_progress"
+            groups="group_trip_booking_user"/>
+
+        <menuitem name="Confirmed Trips" action="fleet_trip_reservation_action_confirm"
+            parent="transport_trip" id="transport_trip_confirm"
+            groups="group_trip_booking_user"/>
+
+        <menuitem name="Prepare Manifest" action="trip_board_wizard_act"
+            parent="transport_trip" id="prepare_trip_boarding_chart"
+            groups="group_trip_booking_user"/>
+
+        <menuitem name="Manifest" action="trip_board_passenger_action"
+            parent="transport_trip" id="trip_boarding_chart"
+            groups="group_trip_booking_user"/>
+
+        <menuitem name="Rental" parent="transport_service" id="transport_rental"
+            sequence="1" groups="fleet.group_fleet_user"/>
+
+        <menuitem name="Money Transfer" action="action_money_transfer"
+            parent="transport_service" id="transport_money_transfer" sequence="1"
+            groups="fleet.group_fleet_user,group_money_transfer_user"/>
+        
+        <menuitem name="Vehicle Booking" action="action_vehicle_booking"
+            parent="transport_service" id="transport_vehicle_booking" sequence="1"
+            groups="group_vehicle_booking_user"/>
+        
+        <menuitem name="Package Transfer" action="action_package_management" id="menu_fleet_packaging"
+            parent="transport_service" groups="group_package_user"/>
+        
+        <menuitem name="Scan Packages" parent="transport_service" id="scan_package_transfer"
+        action="scan_package_wizard_act"/>
+
+        <!-- Configuration Menus -->
+        <menuitem name=" " parent="transport_main_menu" id="side_transport_config"
+            sequence="5" groups="fleet.group_fleet_user"/>
+        <menuitem name="Configuration" parent="side_transport_config"
+            id="transport_config" sequence="5" groups="fleet.group_fleet_user"/>
+        <menuitem name="Daily Trip Configuration" parent="transport_config"
+            id="transport_fleet_trip_configuration" sequence="1"
+            groups="fleet.group_fleet_user"/>
+        <menuitem name="Daily Trips" action="fleet_trip_act"
+            parent="transport_fleet_trip_configuration" id="transport_fleet_trip"
+            sequence="1" groups="fleet.group_fleet_user"/>
+        <menuitem name="Trips Creator" action="fleet_trip_config_act"
+            parent="transport_fleet_trip_configuration" id="transport_fleet_trip_config"
+            sequence="2" groups="fleet.group_fleet_user"/>
+        <menuitem name="Manage Fares" action="trip_config_fare_act"
+            parent="transport_fleet_trip_configuration" id="transport_trip_config_fare"
+            sequence="3" groups="fleet.group_fleet_user"/>
+        <menuitem name="Passenger Types" action="trip_config_passenger_type_act"
+            parent="transport_fleet_trip_configuration" id="trip_config_passenger_type_menu"
+            sequence="4" groups="fleet.group_fleet_user"/>
+        
+        <menuitem name="Manage Cities" action="fleet_city_act"
+            parent="transport_config" id="transport_fleet_city" sequence="1"
+            groups="fleet.group_fleet_user"/>
+        <menuitem name="Vehicle Routes" action="fleet_route_act"
+            parent="transport_config" id="transport_fleet_route" sequence="1"
+            groups="fleet.group_fleet_user"/>
+        <menuitem name="Parking Location" action="fleet_parking_location_act"
+            parent="transport_config" id="transport_parking_location" sequence="2"
+            groups="fleet.group_fleet_user"/>
+        <!-- <menuitem name="Parking Fare/Vehicle" action="fleet_parking_type_act"
+            parent="transport_config" id="transport_parking_type" sequence="3"
+            groups="fleet.group_fleet_user"/> -->
+        <menuitem name="Money Transfer Charge" action="action_money_transfer_charge"
+            parent="transport_config" id="transport_money_transfer_charge"
+            sequence="5" groups="fleet.group_fleet_user"/>
+        <menuitem name="Package Charge" action="action_package_fare"
+            parent="transport_config" id="transport_package_charge"
+            sequence="6" groups="fleet.group_fleet_user"/>
+
+        <!-- Vehicle booking Fare Menu -->
+
+        <menuitem name="Vehicle Booking Charge" action="action_vehicle_booking_fare"
+            parent="transport_config" id="transport_vehicle_booking_fare" sequence="2"
+            groups="fleet.group_fleet_user"/>
+        <!-- Vehicle booking Fare Menu -->
+
+        <menuitem name="Luggage Charge" action="action_luggage_fare"
+            parent="transport_config" id="transport_luggage_charge"
+            sequence="7"/>
+
+        <menuitem name="Misellaneous Settings" action="action_config_transport"
+            parent="transport_config" id="transport_config_settings"
+            sequence="10" groups="fleet.group_fleet_user"/>
+        <menuitem name="Daily Trip Booking" id="portal_daily_trip_booking" parent="portal.portal_menu"
+            sequence="10" groups="group_trip_passenger_user"/>
+        <menuitem name="Trip Booking" id="portal_trip_booking" parent="portal_daily_trip_booking"
+             action="fleet_trip_reservation_act_all"/>
+
+    </data>
+</openerp>

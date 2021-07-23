@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record forcecreate="True" id="ir_cron_so_pos_report" model="ir.cron">
+            <field name="name">Sale and POS Detail</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'sale.order'" name="model"/>
+            <field eval="'send_mail_sms'" name="function"/>
+            <field eval="'()'" name="args"/>
+            <field eval="True" name="active"/>
+            <field name="doall" eval="True"/>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="report_money_transfer_document">
+            <!-- Header -->
+            <div class="header">
+                <div class="row">
+                </div>
+            </div>
+            <!-- Header END -->
+
+            <!-- footer -->
+            <div class="footer">
+                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;' % ('Code128', o.name, 500, 50)"/>
+            </div>
+            <!-- footer end -->
+
+            <div class="page">
+                <div class="oe_structure"/>
+                <div class="row">
+                    <h3><center><span t-field="o.name"/></center></h3>
+                    <table>
+                        <tbody>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left" width="60%">
+                                    <span>Date :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.date"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left" width="60%">
+                                    <span>Receiver :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.receiver_id"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left" width="60%">
+                                    <span>Location of Receiver :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.rec_city_id"/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left" width="60%">
+                                    <span>Sender Client :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-if="o.existing_cust"><span t-field="o.cust_id"/></span>
+                                    <span t-if="not o.existing_cust"><span t-field="o.cust_name"/></span>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left" width="60%">
+                                    <span>Amt Transferred :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.amount"/><span t-if="o.is_diff_currency"><span t-field="o.currency_id.symbol"/></span>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 11px;">
+                                <td class="text-left" width="60%">
+                                    <span>Charge :</span>
+                                </td>
+                                <td style="padding-left:2px;">
+                                    <span t-field="o.charges"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <template id="report_money_transfer_temp">
+            <t t-call="report.html_container">
+                <t t-foreach="doc_ids" t-as="doc_id">
+                    <t t-raw="translate_doc(doc_id, doc_model, 'receiver_id.lang', 'spantree_logistics.report_money_transfer_document')"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

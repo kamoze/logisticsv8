@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="seat_status_wizard_form_view" model="ir.ui.view">
+            <field name="name">seat status form</field>
+            <field name="model">seat.status.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Seat Status Wizard">
+                <group>
+                    <field name="date"/>
+                    <field name="route_id"/>
+                    <field name="trip_id"/>
+                </group>
+                     <footer>
+                        <button name="get_data" string="Seat Status" type="object"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_seat_status_wizard" model="ir.actions.act_window">
+            <field name="name">Seat Status Wizard Action</field>
+            <field name="res_model">seat.status.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Seat Status Check" parent="report_menu" id="seat_status_menu" sequence="2" 
+        action="action_seat_status_wizard" groups="fleet.group_fleet_user"/>
+        
+        <record id="spantree_logistics.seat_status_menu" model="ir.ui.menu">
+    		<field name="groups_id" eval="[(3,ref('group_cashier_user'))]"/>
+		</record>
+        
+    </data>
+</openerp>

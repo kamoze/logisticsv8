@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="order_analysis_wizard_form_view" model="ir.ui.view">
+            <field name="name">order analysis form</field>
+            <field name="model">order.analysis.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Order Analysis Wizard">
+                <group>
+                    <field name="start_date" class="oe_inline"/>
+                    <field name="end_date" class="oe_inline"/>
+                    <field name="user_id" class="oe_inline"/>
+                </group>
+                     <footer>
+                        <button name="get_data" string="Daily Trip" type="object" class="oe_highlight" context="{'print_trip':True}"/>
+                        <button name="get_data" string="Parking" type="object" class="oe_highlight" context="{'print_parking':True}"/>
+                        <button name="get_data" string="Package Transfer" type="object" class="oe_highlight" context="{'print_package':True}"/>
+                        <button name="get_data" string="Money Transfer" type="object" class="oe_highlight" context="{'print_money':True}"/>
+                        <button name="get_data" type="object" string="ALL" class="oe_highlight oe_inline" context="{'print_trip':True, 'print_parking':True,'print_package':True ,'print_money':True}"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_order_analysis_wizard" model="ir.actions.act_window">
+            <field name="name">Order Analysis Wizard Action</field>
+            <field name="res_model">order.analysis.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name=" " parent="transport_main_menu" id="side_transport_report"
+        sequence="4" groups="fleet.group_fleet_user,group_cashier_user"/>
+        <menuitem name="Report" parent="side_transport_report" id="report_menu" sequence="4" 
+        groups="fleet.group_fleet_user"/>
+        <menuitem name="Order Analysis" parent="report_menu" id="order_analysis_menu" sequence="1" 
+        action="action_order_analysis_wizard" groups="fleet.group_fleet_user,group_cashier_user"/>
+
+    </data>
+</openerp>

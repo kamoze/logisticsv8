@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="print_tickets_wizard_form_view" model="ir.ui.view">
+            <field name="name">print tickets form</field>
+            <field name="model">print.tickets.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Print Tickets Wizard">
+                    <group>
+                        <field name="booking_no" required="1" style="width:40%"/>
+                        <field name="pin_no" style="width:40%"/>
+                    </group>
+                    <footer>
+                       <button name="get_tickets" string="Print Tickets" type="object" class="oe_highlight" context="{'print_tickets':True}"/>
+                       or
+                       <button string="Cancel" class="oe_link" special="cancel" />
+                   </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_print_tickets_wizard" model="ir.actions.act_window">
+            <field name="name">Print Tickets Wizard Action</field>
+            <field name="res_model">print.tickets.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Print Tickets" parent="report_menu" id="print_tickets_menu" sequence="3" 
+        action="action_print_tickets_wizard"/>
+        <menuitem name=" " parent="portal.portal_menu" id="print_tickets_main_menu_portal" groups="group_print_tickets_user"/>
+        <menuitem name="Print Tickets" parent="print_tickets_main_menu_portal" id="print_tickets_menu_portal"
+        action="action_print_tickets_wizard" groups="group_print_tickets_user"/>
+
+
+    </data>
+</openerp>

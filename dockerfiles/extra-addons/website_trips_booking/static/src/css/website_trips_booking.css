@@ -1,0 +1,33 @@
+/*
+  Hide radio button (the round disc)
+  we will use just the label to create pushbutton effect
+*/
+.ace_event_menu[type=radio] {
+    display:none;
+    margin:10px;
+}
+
+/*
+  Change the look'n'feel of labels (which are adjacent to radiobuttons).
+  Add some margin, padding to label
+*/
+.ace_event_menu[type=radio] + label {
+    display:inline-block;
+    margin:-2px;
+    padding: 4px 12px;
+    background-color:#c6c6bc;
+    border-color: #ddd;
+}
+/*
+ Change background color for label next to checked radio button
+ to make it look like highlighted button
+*/
+.ace_event_menu[type=radio]:checked + label {
+   background-image: none;
+    background-color:#929292;
+}
+
+.menu_tab:hover {
+   cursor: pointer;
+
+}

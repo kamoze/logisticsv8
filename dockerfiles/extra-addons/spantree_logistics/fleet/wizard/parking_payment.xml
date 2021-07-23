@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- trip.input.seat-->
+        <record id="parking_payment_form" model="ir.ui.view">
+            <field name="name">parking.payment.form</field>
+            <field name="model">parking.payment</field>
+            <field name="arch" type="xml">
+            <form string="Parking Payment Wizard">
+                  <group string="Make Payment">
+                      <group>
+                          <field name="create_invoice"/>
+                          <field name="type_charge" attrs="{'invisible': [('fixed_charge', '=', True)]}"/>
+                          <field name="fixed_charge"/>
+                      </group>
+                      <group>
+                          <field name="end_time"
+                            attrs="{'invisible':['|', ('type_charge','!=', 'daily'), ('fixed_charge', '=', True)] ,'required':[('fixed_charge', '=', False), ('type_charge','=', 'daily')]}"/>
+                          <field name="hours" widget="float_time"
+                            attrs="{'invisible':['|', ('type_charge','!=', 'hour'), ('fixed_charge', '=', True)] ,'required':[('fixed_charge', '=', False), ('type_charge','=', 'hour')]}"/>
+                          <field name="weeks"
+                            attrs="{'invisible':['|', ('type_charge','!=', 'week'), ('fixed_charge', '=', True)] ,'required':[('fixed_charge', '=', False), ('type_charge','=', 'week')]}"/>
+                      </group>
+                  </group>
+                  <footer>
+                      <button name="finalize" string="Finalize Payment" type="object" class="oe_highlight"/>
+                      or
+                      <button string="Cancel" class="oe_link" special="cancel" />
+                  </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="parking_payment_act" model="ir.actions.act_window">
+            <field name="name">parking.payment.act</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">parking.payment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

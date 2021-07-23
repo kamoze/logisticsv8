@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+    <record id="student_assessment_form_view" model="ir.ui.view">
+        <field name="name">student.assessment.form.view</field>
+        <field name="model">student.assessment</field>
+        <field name="arch" type="xml">
+            <form string="Student Assessment">
+								<header>
+										<button name="update_assessment" string="Update Lines" type="object"/>
+								</header>
+                <group>
+                    <field name='registred_sub_tags'/>
+                    <!-- <field name='aessessment_type'/> -->
+
+                </group>
+                <group>
+                  <field name="student_assessment_lines" nolabel="1">
+                      <tree editable="bottom">
+                          <field name="student_id"/>
+													<field name="ca1"/>
+													<field name="ca2"/>
+													<field name="ca3"/>
+													<field name="ca4"/>
+													<field name="participation"/>
+													<field name="exam_score"/>
+													<field name="attendance_score" readonly="1"/>
+													<field name="total_score" readonly="1"/>
+													<field name="grade" readonly="1"/>
+													<field name="grade_point" readonly="1"/>
+                          <field name="grade_line_id" invisible="1"/>
+													<field name="course_reg_id" invisible="1"/>
+                          <field name="student_assessment_id" invisible="1"/>
+                      </tree>
+                  </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+
+
+        <record id="student_assessment_tree_view" model="ir.ui.view">
+          <field name="name">student.assessment.tree</field>
+          <field name="model">student.assessment</field>
+          <field name="arch" type="xml">
+            <tree>
+                <field name="registred_sub_tags"/>
+                <!-- <field name="assessment_type"/> -->
+            </tree>
+          </field>
+      </record>
+
+
+		 <record id="student_assessment_search" model="ir.ui.view">
+			 <field name="name">student.assessment.search</field>
+			 <field name="model">student.assessment</field>
+			 <field name="priority" eval="8" />
+			 <field name="arch" type="xml">
+				 <search string="Student Assessment">
+					 <field name="registred_sub_tags" />
+					 <field name="assessment_type" />
+					 <!-- <field name="course_reg_id" /> -->
+					 <newline />
+				</search>
+			 </field>
+		 </record>
+
+      <record id="action_student_assessment" model="ir.actions.act_window">
+          <field name="name">Student Assessment</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">student.assessment</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="student_assessment_tree_view" />
+      </record>
+
+        <!-- <menuitem id="main_menu_subject_tag" name="Subject Tags" parent="openeducat_erp.menu_op_school_config_subject"/> -->
+        <menuitem id="main_menu_student_assessment" name="Student Assessment" parent="openeducat_erp.menu_op_faculty_main_faculty" action="action_student_assessment" sequence="81"/>
+
+  </data>
+</openerp>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="account_invoice_form_transport">
+            <field name="name">account.invoice.form.transport</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="date_invoice" position="before">
+                        <field name="parking_pass_id" attrs="{'invisible':[('parking_pass_id','=',False)]}" />
+                        <field name="money_transfer_id" attrs="{'invisible':[('money_transfer_id','=',False)]}"/>
+                        <field name="vehicle_book_id" attrs="{'invisible':[('vehicle_book_id','=',False)]}"/>
+                        <field name="trip_book_id" attrs="{'invisible':[('trip_book_id','=',False)]}"/>
+                        <field name="is_parking" attrs="{'invisible':[('is_parking','=',False)]}"/>
+                        <field name="package_id" attrs="{'invisible':[('package_id','=',False)]}"/>
+                        <field name="is_luggage" invisible="1"/>
+                </field>
+                <div groups="base.group_multi_currency" position="after">
+                    <field name="pass_start_date" readonly="1" attrs="{'invisible':[('parking_pass_id', '=', False)]}"/>
+                    <field name="pass_end_date" readonly="1" attrs="{'invisible':[('parking_pass_id', '=', False)]}"/>
+                </div>
+                <xpath expr="//page[@string='Payments']" position="after">
+                    <page string="Goods Information" attrs="{'invisible':[('package_id','=',False)]}">
+                        <field name="goods_info_lines" attrs="{'readonly': [('state', '=', 'paid')]}">
+                            <tree string="Goods Information" editable="top">
+                                <field name="goods_name"/>
+                                <field name="goods_description"/>
+                                <field name="goods_qty"/>
+                                <field name="goods_price"/>
+                                <field name="invoice_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

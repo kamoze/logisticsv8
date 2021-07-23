@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        
+        <!--  Add payment options to sale.order and invoice forms -->
+        <record model="ir.ui.view" id="payment_paystack_option_config">
+            <field name="model">account.config.settings</field>
+            <field name="inherit_id" ref="account.view_account_config_settings"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='payment_acquirer']" position="inside">
+                    <button name='%(payment.action_payment_acquirer)d' type="action"
+                        string="Configure payment acquiring methods" class="oe_link"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record model="ir.cron" id="paystack_online_payment">
+           <field name="name">Paystack Payment CRON</field>
+           <field name="interval_number">1</field>
+           <field name="interval_type">minutes</field>
+           <field name="numbercall">-1</field>
+           <field name="model" eval="'paystack.logs'"/>
+           <field name="function" eval="'payment_paystack_vseven'"/>
+           <field name="args" eval="'([])'"/>
+        </record>
+    </data>
+</openerp>

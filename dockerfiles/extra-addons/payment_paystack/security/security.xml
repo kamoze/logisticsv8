@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record id="group_paystack_user" model="res.groups">
+        <field name="name">Paystack Logs</field>
+    </record>
+    
+    <record model="ir.rule" id="paystack_portal_public_rule">
+           <field name="name">Paystack Rules</field>
+           <field name="model_id" ref="model_paystack_logs"/>
+           <field name="domain_force">[('log_user_id', '=', user.id)]</field>
+           <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+           <field name="perm_create" eval="False"/>
+           <field name="perm_unlink" eval="False"/>
+           <field name="perm_write" eval="False"/>
+       </record>
+
+
+
+</data>
+</openerp>

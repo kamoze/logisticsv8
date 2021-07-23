@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- fleet.parking -->
+        <record model='ir.ui.view' id='fleet_parking_form'>
+            <field name="name">fleet.parking.form</field>
+            <field name="model">fleet.parking</field>
+            <field name="arch" type="xml">
+                <form string="Parking" version="7.0"> 
+                    <header>
+                         <button name="make_payment" string="Payment" type="object" class="oe_highlight oe_inline" states="draft"/>
+                         <button name="create_cash_line" string="Create Invoice" type="object" class="oe_highlight oe_inline" states="parked"/>
+                         <button name="print_invoice" string="Print Invoice" type="object" class="oe_highlight oe_inline" states="invoiced"/>
+                         <button name="release_vehicle" string="Released" type="object" class="oe_highlight oe_inline" states="invoiced"/>
+                         <field name="state" widget="statusbar" />
+                    </header>
+                    <sheet>
+                    <div class="oe_button_box oe_right">
+                        <field string="Barcode" name="barcode" widget="image" />
+                    </div>
+                    <div class="oe_title">
+                        <label for="number" class="oe_edit_only"/>
+                        <h1>
+                            <field name="number" class="oe_inline"/>
+                        </h1>
+                    </div>
+                    <group >
+                        <group string="Customer and Location" attrs="{'readonly':[('state','not in',['draft'])]}">
+                            <field name="existing_cust"/>
+                            <field name="customer_id" attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('existing_cust','=',False)],'required':[('existing_cust','=',True)]}" domain="[('customer','=',True)]"/>
+                            <field name="cust_name" attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('existing_cust','=',True)],'required':[('existing_cust','=',False)]}"/>
+                            <field name="park_location_id" attrs="{'readonly':[('state','not in',['draft'])]}" context="{'from_parking':True}" />
+                            <field name="type_id" domain="[('location_id', '=', park_location_id)]" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </group>
+                        <group string="Time and Charges" >
+                            <field name="start_time" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="end_time" readonly="1"/>
+                            <field name="charge_type" readonly="1"/>
+                            <field name="charge" />
+                            <field name="total_charge"/>
+                            <field name="no_of_days"/>
+                        </group>
+                        <group string="Extra">
+                            <field name="to_be_invoiced" readonly="1"/>
+                            <field name="invoice_id" readonly="1"/>
+                            <field name="license_plate" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="parking_user"/>
+                        </group>
+                    </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_parking_tree'>
+            <field name="name">fleet.parking.tree</field>
+            <field name="model">fleet.parking</field>
+            <field name="arch" type="xml">
+                <tree string="Parking List" > 
+                    <field name="park_location_id"/>
+                    <field name="customer_id"/>
+                    <field name="charge"/>
+                    <field name="start_time"/>
+                    <field name="end_time"/>
+                    <field name="no_of_days"/>
+                    <field name="total_charge"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_parking_act'>
+            <field name="name">Parking</field>
+            <field name="res_model">fleet.parking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="fleet_parking_act_form_view" model="ir.actions.act_window">
+            <field eval="1" name="sequence"/>
+            <field name="name">Parking</field>
+            <field name="res_model">fleet.parking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <!-- fleet.parking.type -->
+        <record model='ir.ui.view' id='fleet_parking_type_form'>
+            <field name="name">fleet.parking.type.form</field>
+            <field name="model">fleet.parking.type</field>
+            <field name="arch" type="xml">
+                <form string="Parking Type" version="7.0"> 
+                    <group>
+                        <group>
+                            <field name="product_id" widget="selection" domain="[('categ_id','child_of', %(product_category_parking)d)]"/>
+                            <field name="charge_price"/>
+                            <!-- <field name="location_id"/> -->
+                        </group>
+                        <group>
+                            <field name="code" />
+                            <field name="name" />
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_parking_type_tree'>
+            <field name="name">fleet.parking.type.tree</field>
+            <field name="model">fleet.parking.type</field>
+            <field name="arch" type="xml">
+                <tree string="Parking Types"> 
+                    <field name="product_id" />
+                    <field name="code" />
+                    <field name="name" />
+                    <field name="hour_price"/>
+                    <field name="charge_price"/>
+                    <field name="weekly_price"/>
+                    <!-- <field name="location_id"/> -->
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_parking_type_act'>
+            <field name="name">Parking Type</field>
+            <field name="res_model">fleet.parking.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- fleet.parking.location -->
+        <record model='ir.ui.view' id='fleet_parking_location_form'>
+            <field name="name">fleet.parking.location.form</field>
+            <field name="model">fleet.parking.location</field>
+            <field name="arch" type="xml">
+                <form string="Parking Location" version="7.0"> 
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="location_id" />
+                        </group>
+                        <group>
+                            <field name="city_id"/>
+                            <field name="capacity"/>
+                            <field name="default_location"/>
+                        </group>
+                    </group>
+                    <group string="Parking Types">
+                        <field name="fare_ids" nolabel="1">
+                            <tree  editable="top">
+                                <field name="product_id" widget="selection" domain="[('categ_id','child_of', %(product_category_parking)d)]"/>
+                                <field name="code" />
+                                <field name="name" />
+                                <field name="hour_price"/>
+                                <field name="charge_price"/>
+                                <field name="weekly_price"/>
+                                <field name="fixed_price"/>
+                            </tree>
+                        </field>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_parking_location_tree'>
+            <field name="name">fleet.parking.location.tree</field>
+            <field name="model">fleet.parking.location</field>
+            <field name="arch" type="xml">
+                <tree string="Parking Locations"> 
+                    <field name="name"/>
+                    <field name="capacity"/>
+                    <field name="city_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_parking_location_act'>
+            <field name="name">Parking Location</field>
+            <field name="res_model">fleet.parking.location</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- parking.pass -->
+        <record model='ir.ui.view' id='fleet_parking_pass_form'>
+            <field name="name">parking.pass.form</field>
+            <field name="model">parking.pass</field>
+            <field name="arch" type="xml">
+                <form string="Parking Pass" version="7.0">
+                <header>
+                         <button name="make_payment" string="Payment" type="object" class="oe_highlight" states="draft"/>
+                         <button name="view_invoice" string="View Invoice" type="object" class="oe_highlight" states="paid"/>
+                         <button name="print_invoice" string="Print Invoice" type="object" class="oe_highlight" states="paid"/>
+                         <field name="state" widget="statusbar" />
+                </header>
+                    <div class="oe_button_box oe_right">
+                        <field string="Barcode" name="barcode" widget="image" />
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="number" class="oe_inline"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="customer_id" attrs="{'readonly':[('state','=','paid')]}" domain="[('customer','=',True)]"/>
+                            <field name="parking_location_id" context="{'from_parking':True}"/>
+                            <field name="vehicle_type_id" domain="[('location_id', '=', parking_location_id)]" attrs="{'readonly':[('state','=','paid')]}"/>
+                        </group>
+                        <group>
+                            <field name="amount" attrs="{'readonly':[('state','=','paid')]}"/>
+                            <field name="validity"/>
+                            <field name="start_date" required="1" attrs="{'readonly':[('state','=','paid')]}"/>
+                            <field name="end_date" required="1" attrs="{'readonly':[('state','=','paid')]}"/>
+                            <field name="invoice_id"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_parking_pass_tree'>
+            <field name="name">parking.pass.tree</field>
+            <field name="model">parking.pass</field>
+            <field name="arch" type="xml">
+                <tree string="Parking Pass"> 
+                    <field name="customer_id"/>
+                    <field name="number"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="parking_location_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_parking_pass_act'>
+            <field name="name">Parking Pass</field>
+            <field name="res_model">parking.pass</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model='ir.actions.act_window' id='fleet_parking_pass_act_form_view'>
+            <field eval="1" name="sequence"/>
+            <field name="name">Parking Pass</field>
+            <field name="res_model">parking.pass</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+    </data>
+</openerp>

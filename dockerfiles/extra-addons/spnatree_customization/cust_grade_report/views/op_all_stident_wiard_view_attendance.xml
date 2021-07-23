@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+      <!-- <record id="inherit_op_all_student_inherit_form" model="ir.ui.view">
+         <field name="name">inherit.op.all.student.form</field>
+         <field name="model">op.all.student</field>
+         <field name="inherit_id" ref="openeducat_ext.op_all_student_inherit_form"/>
+         <field name="arch" type="xml">
+           <xpath expr="//field[@name='student_ids']" position="attributes">
+             <attribute name="domain">[]</attribute>
+           </xpath>
+        </field>
+      </record> -->
+
+			<record id="view_op_attendance_sheet_inherited" model="ir.ui.view">
+				<field name="name">op.attendance.sheet.form</field>
+				<field name="model">op.attendance.sheet</field>
+				<field name="inherit_id" ref="openeducat_ext.view_op_attendance_sheet_inherit_form"/>
+				<field name="priority" eval="8" />
+				<field name="arch" type="xml">
+					<field name="present" position="attributes" >
+						<attribute name="readonly">0</attribute>
+					</field>
+				</field>
+			</record>
+   </data>
+</openerp>

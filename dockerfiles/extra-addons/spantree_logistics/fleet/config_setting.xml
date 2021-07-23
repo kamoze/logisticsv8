@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="config_setting_transport_form" model="ir.ui.view">
+            <field name="name">config.setting.transport.form</field>
+            <field name="model">config.setting.transport</field>
+            <field name="arch" type="xml">
+                <form string="Transport Settings" class="oe_form_configuration">
+                    <header>
+                        <button string="Apply" type="object" name="execute" class="oe_highlight"/>
+                    </header>
+                    <group string="Misellaneous Settings">
+                        <group>
+                        <field name="seat_nos"/>
+                        <label string="Specify the amount of seats to consider if no vehicle allocated in trips, or no seats defined in Vehicle"/>
+                        </group>
+                        <!-- 
+                        <group>
+                        <field name="sort_order"/>
+                        </group> -->
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="action_config_transport" model="ir.actions.act_window">
+            <field name="name">Transport Settings</field>
+            <field name="res_model">config.setting.transport</field>
+            <field name="view_id" ref="config_setting_transport_form"/>
+            <field name='view_mode'>form</field>
+            <field name="target">inline</field>
+        </record>
+    </data>
+</openerp>

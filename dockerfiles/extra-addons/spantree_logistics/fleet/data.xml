@@ -1,0 +1,271 @@
+<openerp>
+<data>
+<!-- <data noupdate="1"> -->
+    <!-- Employee Tags -->
+    <record id="transport_emp_tag1" model="hr.employee.category">
+        <field name="name">Chauffeur</field>
+    </record>
+    <record id="transport_emp_tag2" model="hr.employee.category">
+        <field name="name">Apprenti</field>
+    </record>
+    <record id="transport_emp_tag3" model="hr.employee.category">
+        <field name="name">Convoyeur</field>
+    </record>
+    <record id="transport_emp_tag4" model="hr.employee.category">
+        <field name="name">Baggagiste</field>
+    </record>
+
+    <!-- Products -->
+    <record id="product_category_parking" model="product.category">
+            <field name="parent_id" ref="product.product_category_all"/>
+            <field name="name">Parking</field>
+        </record>
+
+    <record id="product_parking1" model="product.product">
+            <field name="list_price">10</field>
+            <field name="standard_price">10</field>
+            <field name="uom_id" ref="product.product_uom_hour"/>
+            <field name="uom_po_id" ref="product.product_uom_hour"/>
+            <field name="name">Voiture</field>
+            <field name="categ_id" ref="product_category_parking"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="True"/>
+    </record>
+
+    <record id="product_parking2" model="product.product">
+            <field name="list_price">10</field>
+            <field name="standard_price">10</field>
+            <field name="uom_id" ref="product.product_uom_hour"/>
+            <field name="uom_po_id" ref="product.product_uom_hour"/>
+            <field name="name">Bus</field>
+            <field name="categ_id" ref="product_category_parking"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="True"/>
+    </record>
+
+    <record id="product_parking3" model="product.product">
+            <field name="list_price">10</field>
+            <field name="standard_price">10</field>
+            <field name="uom_id" ref="product.product_uom_hour"/>
+            <field name="uom_po_id" ref="product.product_uom_hour"/>
+            <field name="name">Velo</field>
+            <field name="categ_id" ref="product_category_parking"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="True"/>
+    </record>
+
+    <record id="product_parking4" model="product.product">
+            <field name="list_price">10</field>
+            <field name="standard_price">10</field>
+            <field name="uom_id" ref="product.product_uom_hour"/>
+            <field name="uom_po_id" ref="product.product_uom_hour"/>
+            <field name="name">Moto</field>
+            <field name="categ_id" ref="product_category_parking"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="True"/>
+    </record>
+
+    <!-- parking customer -->
+    <!-- <record id="res_partner_parking" model="res.partner">
+            <field name="name">Parking Customer</field>
+            <field eval="0" name="supplier"/>
+            <field eval="1" name="customer"/>
+            <field name="is_company">0</field>
+    </record> -->
+
+    <!-- Sequences -->
+    <!-- parking ticket -->
+     <record id="parking_seq_type" model="ir.sequence.type">
+            <field name="name">Parking</field>
+            <field name="code">parking</field>
+        </record>
+
+        <record id="fleet_parking_seq" model="ir.sequence">
+            <field name="name">Parking</field>
+            <field name="code">parking</field>
+            <field name="prefix">P/%(y)s%(month)s%(day)s/%(h24)s%(min)s%(sec)s</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False" />
+        </record>
+
+    <!-- parking pass -->
+     <record id="parking_pass_seq_type" model="ir.sequence.type">
+            <field name="name">Parking Pass</field>
+            <field name="code">parking_pass</field>
+        </record>
+
+        <record id="fleet_parking_pass_seq" model="ir.sequence">
+            <field name="name">Parking Pass</field>
+            <field name="code">parking_pass</field>
+            <field name="prefix">Pass/%(y)s%(month)s%(day)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False" />
+        </record>
+
+    <!-- Money Transfer -->
+        <record id="res_partner_money_transfer" model="res.partner">
+            <field name="name">Money Transfer Customer</field>
+            <field eval="0" name="supplier"/>
+            <field eval="1" name="customer"/>
+            <field name="is_company">0</field>
+        </record>
+
+        <!-- Sequences for fleet.money.transfer -->
+        <record id="seq_type_fleet_money_transfer" model="ir.sequence.type">
+            <field name="name">Money Transfer</field>
+            <field name="code">fleet.money.transfer</field>
+        </record>
+
+        <record id="seq_money_transfer" model="ir.sequence">
+            <field name="name">Money Transfer</field>
+            <field name="code">fleet.money.transfer</field>
+            <field name="prefix">MT%(y)s%(month)s%(day)s</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!-- m.t products -->
+        <record id="product_product_money_transfer" model="product.product">
+            <field name="name">Money Transfer</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="True"/>
+        </record>
+
+        <record id="product_product_money_transfer_service_charges" model="product.product">
+            <field name="name">Money Transfer Service Charges</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="True"/>
+        </record>
+
+        <!-- Vehicle Booking  -->
+
+        <record id="booking_charges_product" model="product.product">
+            <field name="name">Booking Charges</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="True"/>
+        </record>
+
+        <record id="res_partner_vehicle_booking" model="res.partner">
+            <field name="name">Vehicle Booking Customer</field>
+            <field eval="0" name="supplier"/>
+            <field eval="1" name="customer"/>
+            <field name="is_company">0</field>
+        </record>
+    <!-- Trip Booking -->
+
+        <!-- trip product -->
+        <record id="product_product_trip" model="product.product">
+            <field name="name">Trip Booking</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="True"/>
+        </record>
+
+        <!-- luggage product -->
+        <record id="product_luggage_qty_product" model="product.product">
+            <field name="name">Luggage Charges</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="True"/>
+        </record>
+
+        <record id="daily_trip_booking_seq_type" model="ir.sequence.type">
+            <field name="name">Booking</field>
+            <field name="code">trip_booking</field>
+        </record>
+
+        <record id="daily_trip_booking_seq" model="ir.sequence">
+            <field name="name">Booking</field>
+            <field name="code">trip_booking</field>
+            <field name="prefix">%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False" />
+        </record>
+
+        <!-- trip creator scheduler -->
+       <record model="ir.cron" id="daily_trip_cron">
+            <field name="name">Trips Creator</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'fleet.trip.config'"/>
+            <field name="function" eval="'schedule_trips'"/>
+        </record>
+
+        <!-- Cash Register Per scheduler -->
+        <record model="ir.cron" id="daily_user_cash_cron">
+            <field name="name">Cash Register Creator</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <!-- <field name="doall" eval="True"/> -->
+            <field name="model" eval="'res.users'"/>
+            <field name="function" eval="'create_cash_register'"/>
+        </record>
+
+        <!-- trip passenger types -->
+        <record id="passenger_type_adult" model="passenger.type">
+            <field name="name">Adult</field>
+        </record>
+
+        <record id="passenger_type_senior" model="passenger.type">
+            <field name="name">Senior Citizen</field>
+        </record>
+
+        <record id="passenger_type_child" model="passenger.type">
+            <field name="name">Child</field>
+        </record>
+
+        <!-- fleet.package -->
+        <record id="product_product_package" model="product.product">
+            <field name="name">Packaging Product</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">consu</field>
+            <field name="sale_ok" eval="False"/>
+            <field name="track_all" eval="False"/>
+        </record>
+
+        <record id="seq_type_fleet_package" model="ir.sequence.type">
+            <field name="name">Packaging</field>
+            <field name="code">fleet.package</field>
+        </record>
+
+        <record id="seq_package_management" model="ir.sequence">
+            <field name="name">Packaging</field>
+            <field name="code">fleet.package</field>
+            <field name="prefix">PKG</field>
+            <field name="padding">3</field>
+        </record>
+
+        <!-- vehicle booking -->
+     <record id="booking_pass_type" model="ir.sequence.type">
+            <field name="name">Vehicle Booking</field>
+            <field name="code">vehicle_booking</field>
+        </record>
+
+        <record id="fleet_booking_seq" model="ir.sequence">
+            <field name="name">vehicle booking</field>
+            <field name="code">vehicle_booking</field>
+            <field name="prefix">Booking/%(y)s%(month)s%(day)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False" />
+        </record>
+
+        <!-- fleet.city  parent location for each parking-->
+        <record id="stock_location_parking" model="stock.location">
+            <field name="name">Parking Locations</field>
+            <field name="usage">view</field>
+            <field name="company_id"></field>
+        </record>
+
+</data>
+</openerp>

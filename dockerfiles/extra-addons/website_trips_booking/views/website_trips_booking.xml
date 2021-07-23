@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_frontend" inherit_id="website.assets_frontend" name="Website Events tram">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/website_trips_booking/static/src/js/jquery.js"/>
+                <link rel="stylesheet" href="/website_trips_booking/static/src/js/jquery-ui.css"/>
+                <script type="text/javascript" src="/website_trips_booking/static/src/js/website_trips_booking.js"></script>
+                <link rel='stylesheet' href='/website_trips_booking/static/src/css/website_trips_booking.css'/>
+            </xpath>
+        </template>
+        <template id="index" name="Trips">
+            <t t-call="website.layout">
+                <div id="wrap"  style="background-image:url(/website_trips_booking/static/src/img/home-top-bg.jpg);background-size: cover;padding-top:100px;padding-bottom:100px;">
+                    <div class="oe_structure"/>
+                    <div class="container">
+                        <div class="row" style="padding: 15px;background: rgba(0,0,0,0.3);margin-top: -1px;color: #FFF;">
+                            <form class="col-xs-12 ac_trip_search_form" action="/trips/available"  method="post">
+                                <div class="container">
+                                    <div class="row">
+                                        <t t-if="form_val.get('ac_event_type')=='one_way'">
+                                            <input type="radio"  name="ac_event_type" id="one_way_trip" value="one_way"  class="ace_event_menu" checked="checked"/>
+                                            <label class="menu_tab" for="one_way_trip" style="padding: 12px;margin-bottom:10px">One Way</label>
+                                            <input type="radio" id="return_trip" name="ac_event_type"  value="return_trip" class="ace_event_menu" />
+                                            <label class="menu_tab" for="return_trip" style="padding: 12px;margin-bottom:10px">Return Trip</label>
+                                        </t>
+                                        <t t-if="form_val.get('ac_event_type')=='return_trip'">
+                                            <input type="radio"  name="ac_event_type" id="one_way_trip" value="one_way"  class="ace_event_menu" />
+                                            <label class="menu_tab" for="one_way_trip" style="padding: 12px;margin-bottom:10px">One Way</label>
+                                            <input type="radio" id="return_trip" name="ac_event_type"  value="return_trip" class="ace_event_menu" checked="checked"/>
+                                            <label class="menu_tab" for="return_trip" style="padding: 12px;margin-bottom:10px">Return Trip</label>
+                                        </t>
+                                    </div>
+                                    <div class="row down-20">
+                                        <div class="col-sm-3">
+                                            <div t-attf-class="form-group #{error.get('departing_location') and 'has-error' or ''}">
+                                                <label class="control-label label-optional" for="departing_location">Departing from</label>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-map-marker"></span>
+                                                        </div>
+                                                        <input type="text" class="col-sm-10 col-xs-10 no-left-border form-control ui-autocomplete-input list_of_city ac_all_fields_change"  placeholder="Departing from" name="departing_location" autocomplete="off" t-att-value="form_val.get('departing_location')"/>
+                                                        <br/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div t-attf-class="form-group #{error.get('arriving_location') and 'has-error' or ''}">
+                                                <label class="control-label label-optional" for="arriving_location">Arriving at</label>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-map-marker"></span>
+                                                        </div>
+                                                        <input type="text" class="col-sm-10 col-xs-10 no-left-border form-control ui-autocomplete-input list_of_city ac_all_fields_change"  placeholder="Arriving at" name="arriving_location" autocomplete="off" t-att-value="form_val.get('arriving_location')"/>
+                                                        <br/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div t-attf-class="form-group #{error.get('departing_on') and 'has-error' or ''}">
+                                                <label class="control-label label-optional" for="departing_on">Departing on</label>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </div>
+                                                        <input type="text" class="col-sm-10 col-xs-10 no-left-border form-control ui-autocomplete-input ac_all_fields_change" id="datepicker_departing" placeholder="DD/MM/YYYY" name="departing_on" autocomplete="off" t-att-value="form_val.get('departing_on')"/>
+                                                        <br/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="ac_arriving_on_group">
+                                                <div t-attf-class="form-group #{error.get('arriving_on') and 'has-error' or ''}">
+                                                    <label class="control-label label-optional" for="arriving_on">Arriving on</label>
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </div>
+                                                            <input type="text" class="col-sm-10 col-xs-10 no-left-border form-control ui-autocomplete-input ac_all_fields_change" id="datepicker_arriving" placeholder="DD/MM/YYYY" name="arriving_on" autocomplete="off" t-att-value="form_val.get('arriving_on')"/>
+                                                            <br/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <div t-attf-class="form-group #{error.get('number_of_passengers') and 'has-error' or ''}">
+                                                <label class="control-label label-optional" for="number_of_passengers">No. of Passengers</label>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <input type="number" class="col-sm-10 col-xs-10 no-left-border form-control ui-autocomplete-input ac_all_fields_change" name="number_of_passengers" autocomplete="off" t-att-value="form_val.get('number_of_passengers')"/>
+                                                        <br/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div t-attf-class="form-group #{error.get('list_of_available_trips') and 'has-error' or ''}">
+                                                <label class="control-label label-optional" for="list_of_available_trips_id">Available Trips</label>
+                                                <div class="form-group">
+                                                    <select name="list_of_available_trips" id="list_of_available_trips_id" class="col-sm-10 col-xs-10 form-control">
+                                                    </select>
+                                                    <br/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="ac_arriving_on_group">
+                                                <div t-attf-class="form-group #{error.get('list_of_return_trips') and 'has-error' or ''}">
+                                                    <label class="control-label label-optional" for="list_of_return_trips_id">Return Trips</label>
+                                                    <div class="form-group">
+                                                        <select name="list_of_return_trips" id="list_of_return_trips_id" class="col-sm-10 col-xs-10 form-control">
+                                                        </select>
+                                                        <br/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 text-center">
+                                            <a href="#" class="btn btn-lg mt8 ac-view-trip-fares btn-info" id="view-fares-position">
+                                              View Fares
+                                            </a>
+                                            <a href="#" class="btn btn-lg mt8 js_check_product a-submit-trip-ac btn-danger">
+                                              Book Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6 mt8">
+                                            <t t-if="passenger_type_list">
+                                            <table class="table">
+                                                <thead>
+                                                  <tr>
+                                                    <th>Passenger Type</th>
+                                                    <th>Price</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-foreach="passenger_type_list" t-as="pessangers_list">
+                                                        <tr>
+                                                            <td><t t-esc="pessangers_list[1]"/></td>
+                                                            <td><t t-esc="pessangers_list[2]"/></td>
+                                                        </tr>
+                                                     </t>
+                                                </tbody>
+                                              </table>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </t>
+        </template>
+
+        <template id="available_trips" name="Trips List">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <div class="container">
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <ol class="breadcrumb mt8">
+                                    <li>
+                                        <a href="/trips">Search Trips</a>
+                                    </li>
+                                    <li>Confirm Form</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <div>
+                                    <h3 class="text-center"><t t-esc="departing_location"/><t t-if="ac_event_type == 'one_way'"> <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                                    </t><t t-if="ac_event_type == 'return_trip'"> <i class="fa fa-arrows-h" aria-hidden="true"></i></t> <t t-esc="arriving_location"/></h3>
+                                    <t t-if="trips_information['name']"><div><b>Code: </b><t t-esc="trips_information['name']"/> </div></t>
+                                    <t t-if="trips_information['vehicle_id']"><div><b>Vehicle: </b><t t-esc="trips_information['vehicle_id']"/></div></t>
+                                    <t t-if="trips_information['start_time']"><div><b>Departure Time: </b><t t-esc="trips_information['start_time']"/></div></t>
+                                    <t t-if="trips_information['end_time']"><div><b>Arrival Time: </b><t t-esc="trips_information['end_time']"/></div></t>
+                                    <br/>
+                                    <t t-if="ac_event_type == 'return_trip'">
+                                        <t t-if="return_trip_information['name']"><div><b>Return Code: </b><t t-esc="return_trip_information['name']"/> </div></t>
+                                        <t t-if="return_trip_information['vehicle_id']"><div><b>Return Vehicle: </b><t t-esc="return_trip_information['vehicle_id']"/></div></t>
+                                        <t t-if="return_trip_information['start_time']"><div><b>Return Departure Time: </b><t t-esc="return_trip_information['start_time']"/></div></t>
+                                        <t t-if="return_trip_information['end_time']"><div><b>Return Arrival Time: </b><t t-esc="return_trip_information['end_time']"/></div></t>
+                                    </t>
+                                </div>
+                                <div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <form action="/trips/confirm"  method="post">
+                                <table class="table table-striped">
+                                    <thead class="thead-inverse">
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Passenger Name</th>
+                                            <th>Passenger Type</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="number_of_passengers" t-as="passenger_id">
+                                        <tr>
+                                            <th scope="row"><t t-esc="passenger_id"/></th>
+                                            <td><input class="col-sm-10 col-xs-10 no-left-border form-control" t-att-name="'passenger_name'+str(passenger_id)" type="text"/></td>
+                                            <td>
+                                                 <select class="col-sm-5 col-xs-5 form-control pessanger_type_selection" t-att-name="'passenger_type'+str(passenger_id)">
+                                                     <t t-foreach="passenger_type_list" t-as="pessangers_list">
+                                                        <option t-att-value="pessangers_list[0]" t-att-data="pessangers_list[2]" t-att-passenger="passenger_id"><t t-esc="pessangers_list[1]"/></option>
+                                                     </t>
+                                                 </select>
+                                            </td>
+                                            <td>
+                                                <div t-att-class="'calculate_total'+str(passenger_id)"><t t-esc="default_price"/></div>
+                                            </td>
+                                        </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <input type="hidden" name="source_id" t-att-value="source_id"/>
+                                <input type="hidden" name="destination_id" t-att-value="destination_id"/>
+                                <input type="hidden" name="trip_date" t-att-value="departing_on"/>
+                                <input type="hidden" name="trip_id" t-att-value="trip_id"/>
+                                <input type="hidden" name="total_passenger" t-att-value="total_passenger"/>
+                                <input type="hidden" name="arriving_on" t-att-value="arriving_on"/>
+                                <input type="hidden" name="return_trip_id" t-att-value="return_trip_id"/>
+                                <input type="hidden" name="ac_event_type" t-att-value="ac_event_type"/>
+                                <!--<input type="hidden" name="ac_event_type" t-att-value="ac_event_type"/>-->
+                                <t t-if="number_of_passengers">
+                                    <button type="submit" class="btn btn-primary btn-lg pull-right">Confirm</button>
+                                </t>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure mt8"/>
+            </t>
+        </template>
+    </data>
+</openerp>

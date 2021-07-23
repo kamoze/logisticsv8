@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+	<template id="paystack_redirect_url" name="Payment Status">
+	  <t t-call="website.layout">
+	      <div id="wrap">
+	          <div class="oe_structure oe_empty">
+	              <div class="container">
+	                  <h1 class="mt32"> <t t-esc="status"/></h1>
+	              </div>
+	          </div>
+	      </div>
+	  </t>
+	</template>
+</data>
+</openerp>

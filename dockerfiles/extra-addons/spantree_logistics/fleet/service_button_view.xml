@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model='ir.ui.view' id='service_button_form_view'>
+            <field name="name">service.button.form.view</field>
+            <field name="model">service.button</field>
+            <field name="arch" type="xml">
+                <form string="Service">
+                    <div>
+                        <field name="name" invisible="1"/>
+                    </div>
+                    <center>
+                        <div class="row clearfix text-left" style="color: #B71E20">
+                            <h3>SERVICES</h3>
+                        </div>
+                        <div class="row clearfix">
+                           <div class="col-12 col-sm-2">
+                               <div class="home-hover navigation-slide" data-slide="4">
+                                    <strong style="font-size:11px;">
+                                        <span>PARKING</span>
+                                    </strong><br/>
+                                   <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/parking-80.png"/>
+                               </div>
+                               <span>
+                                   <button name="%(fleet_parking_act)d" string="View" type="action" class="oe_highlight"/>  | 
+                                   <button name="%(fleet_parking_act_form_view)d" string="Create" type="action" class="oe_highlight"/>
+                               </span>
+                           </div>
+                            <div class="col-12 col-sm-2">
+                                <div class="home-hover navigation-slide" data-slide="5">
+                                    <strong style="font-size:11px;">
+                                        <span>RESERVATION</span>
+                                    </strong><br/>
+                                    <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/reservation-80.png"/>
+                                </div>
+                                <button name="%(fleet_trip_reservation_action_confirm)d" string="View" type="action" class="oe_highlight"/>  | 
+                                <button name="%(fleet_trip_reservation_act_form_view)d" string="Create" type="action" class="oe_highlight"/>
+                            </div>
+                            <div class="col-12 col-sm-2">
+                                <div class="home-hover navigation-slide" data-slide="4">
+                                    <strong style="font-size:11px;">
+                                        <span>MONEY TRANSFER</span><br/>
+                                    </strong>
+                                    <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/moneytransfer2-80.png"/>
+                                </div>
+                                <button name="%(action_money_transfer)d" string="View" type="action" class="oe_highlight"/>  | 
+                                <button name="%(action_money_transfer_form_view)d" string="Create" type="action" class="oe_highlight"/>
+                            </div>
+                            <div class="col-12 col-sm-2">
+                                <div class="home-hover navigation-slide" data-slide="3">
+                                    <strong style="font-size:11px;">
+                                        <span>VEHICLE BOOKING</span><br/>
+                                    </strong>
+                                    <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/buslocation-80.png"/>
+                                </div>
+                                <button name="%(action_vehicle_booking)d" string="View" type="action" class="oe_highlight"/>  | 
+                                <button name="%(action_vehicle_booking_form_view)d" string="Create" type="action" class="oe_highlight"/>
+                            </div>
+                            <div class="col-12 col-sm-2">
+                                <div class="home-hover navigation-slide" data-slide="5">
+                                    <strong style="font-size:11px;">
+                                        <span>COURIER</span><br/>
+                                    </strong>
+                                    <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/courier-80.png"/>
+                                </div>
+                                <button name="%(action_package_management)d" string="View" type="action" class="oe_highlight"/>  | 
+                                <button name="%(action_package_management_form_view)d" string="Create" type="action" class="oe_highlight"/>
+                            </div>
+                        </div><br/><br/>
+                        <div groups="base.group_erp_manager">
+                            <div class="row clearfix text-left" style="margin-top:10px; margin-bottom:10px; color: #B71E20;">
+                                <h3>CONFIGURATION</h3>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-12 col-sm-2">
+                                    <div class="home-hover navigation-slide" data-slide="4">
+                                        <strong style="font-size:11px;">
+                                            <span>MANAGE CITIES</span><br/>
+                                        </strong>
+                                        <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/cities-80.png"/>
+                                    </div>
+                                    <span>
+                                        <button name="%(fleet_city_act)d" string="View" type="action" class="oe_highlight"/>
+                                    </span>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="home-hover navigation-slide" data-slide="3">
+                                        <strong style="font-size:11px;">
+                                            <span>ROUTES</span><br/>
+                                        </strong>
+                                        <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/routes-80.png"/>
+                                    </div>
+                                    <button name="%(fleet_route_act)d" string="View" type="action" class="oe_highlight" />
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="home-hover navigation-slide" data-slide="5">
+                                        <strong style="font-size:11px;">
+                                            <span>PARKING LOCATIONS</span><br/>
+                                        </strong>
+                                        <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/parking-80.png"/>
+                                    </div>
+                                    <button name="%(fleet_parking_location_act)d" string="View" type="action" class="oe_highlight"/>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="home-hover navigation-slide" data-slide="4">
+                                        <strong style="font-size:11px;">
+                                            <span>MONEY TRANSFER</span><br/>
+                                        </strong>
+                                        <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/moneytransfer2-801.png"/>
+                                    </div>
+                                    <button name="%(action_money_transfer_charge)d" string="View" type="action" class="oe_highlight"/>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="home-hover navigation-slide" data-slide="3">
+                                        <strong style="font-size:11px;">
+                                            <span>PACKAGE FARE</span><br/>
+                                        </strong>
+                                        <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/fare-80.jpg"/>
+                                    </div>
+                                    <button name="%(action_package_fare)d" string="View" type="action" class="oe_highlight"/>
+                                </div>
+                            </div><br/><br/>
+                            <div class="row clearfix">
+                                <div class="col-12 col-sm-2">
+                                    <div class="home-hover navigation-slide" data-slide="5">
+                                        <strong style="font-size:11px;">
+                                            <span>TRIPS</span><br/>
+                                        </strong>
+                                        <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/bus-location-80.png"/>
+                                    </div>
+                                    <button name="%(fleet_trip_act)d" string="View" type="action" class="oe_highlight"/>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="home-hover navigation-slide" data-slide="5">
+                                        <strong style="font-size:11px;">
+                                            <span>CREATE TRIPS</span><br/>
+                                        </strong>
+                                        <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/bus-location-80.png"/>
+                                    </div>
+                                    <button name="%(fleet_trip_config_act)d" string="View" type="action" class="oe_highlight"/>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="home-hover navigation-slide" data-slide="5">
+                                        <strong style="font-size:11px;">
+                                            <span>TRIPS FARE</span><br/>
+                                        </strong>
+                                        <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/fare-80.jpg"/>
+                                    </div>
+                                    <button name="%(trip_config_fare_act)d" string="View" type="action" class="oe_highlight"/>
+                                </div>
+				<div class="col-12 col-sm-2">
+                                    <div class="home-hover navigation-slide" data-slide="5">
+                                        <strong style="font-size:11px;">
+                                            <span>NUMBER OF SEATS</span><br/>
+                                        </strong>
+                                        <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/seats-80.png"/>
+                                    </div>
+                                    <button name="%(action_config_transport)d" string="View" type="action" class="oe_highlight"/>
+                                </div>
+                        </div><br/><br/>
+                        <div class="row clearfix text-left" style="margin-top:10px; margin-bottom:10px;color: #B71E20;">
+                            <h3>EMPLOYEE</h3>
+                        </div>
+                        <div class="row clearfix">
+                           <div class="col-12 col-sm-2">
+                               <div class="home-hover navigation-slide" data-slide="4">
+                                    <strong style="font-size:11px;">
+                                        <span>EMPLOYEES</span><br/>
+                                    </strong>
+                                    <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/employees-80.png"/>
+                               </div>
+                               <span>
+                                   <button name="%(hr.open_view_employee_list_my)d" string="View" type="action" class="oe_highlight"/>
+                               </span>
+                           </div>
+                            <div class="col-12 col-sm-2">
+                                <div class="home-hover navigation-slide" data-slide="3">
+                                    <strong style="font-size:11px;">
+                                        <span>LEAVE REQUEST</span><br/>
+                                    </strong>
+                                    <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/leave-request-80.png"/>
+                                </div>
+                                <button name="%(hr_holidays.open_ask_holidays)d" string="View" type="action" class="oe_highlight" />
+                            </div>
+                            <div class="col-12 col-sm-2">
+                                <div class="home-hover navigation-slide" data-slide="5">
+                                    <strong style="font-size:11px;">
+                                        <span>EXPENSES</span><br/>
+                                    </strong>
+                                    <img src="http://www2.spantreeng.com/wp-content/uploads/2016/12/expenses-80.png"/>
+                                </div>
+                                <button name="%(hr_expense.expense_all)d" string="View" type="action" class="oe_highlight"/>
+                            </div>
+                          </div>
+			</div>
+                    </center>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

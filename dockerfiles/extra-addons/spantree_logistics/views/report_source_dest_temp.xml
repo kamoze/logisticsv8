@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <template id="source_dest_document">
+            <div t-as="f" t-foreach="get_lug_number(o)">
+                <div class="header">
+                    <div class="row">
+                    </div>
+                </div>
+                <div class="footer">
+                    <div class="row">
+                        <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;' % ('Code128', f['b_name'], 400, 50)"/>
+                    </div>
+                </div>
+                <div class="page">
+                    <div class="row">
+                        <div>
+                            <h3><center><span t-esc="f['customer_name']"/></center></h3>
+                        </div>
+                        <table>
+                            <tbody>
+                                <tr style="font-size: 12px;">
+                                    <td class="text-left"  width="35%">
+                                        <span>Trip :</span>
+                                    </td>
+                                    <td style="padding-left:2px;">
+                                        <span t-esc="f['trip_name']"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 12px;">
+                                    <td class="text-left" width="35%">
+                                        <span>Seat:</span>
+                                    </td>
+                                    <td style="padding-left:2px;">
+                                        <span t-esc="f['seat_number']"/>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 12px;">
+                                    <td class="text-left" width="35%">
+                                        <span>Luggage Name :</span>
+                                    </td>
+                                    <td style="padding-left:2px;">
+                                        <span t-esc="f['luggage_name']"/>
+                                    </td>
+                                </tr>
+                                <t t-if="f['vehicle']">
+                                <tr style="font-size: 12px;">
+                                    <td class="text-left" width="35%">
+                                        <span>Vehicle :</span>
+                                    </td>
+                                    <td style="padding-left:2px;">
+                                        <span t-esc="f['vehicle']"/>
+                                    </td>
+                                </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="report_source_dest_temp">
+            <t t-call="report.html_container">
+                <t t-as="doc_id" t-foreach="doc_ids">
+                    <t t-raw="translate_doc(doc_id, doc_model, 'customer_id.lang', 'spantree_logistics.source_dest_document')"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

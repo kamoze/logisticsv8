@@ -1,0 +1,10 @@
+-
+  Created One template for message
+-
+  !record {model: message.template, id: message_template_test1}:
+    name: SMS MSG
+    type: 'sms'
+    message: _get_msg(type)
+    location_dest_id: stock.stock_location_output
+    bom_id: mrp_bom_9
+    routing_id: mrp.mrp_routing_1

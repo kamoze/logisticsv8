@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_sms_config_form">
+            <field name="name">sms.config.form</field>
+            <field name="model">sms.config</field>
+            <field name="arch" type="xml">
+                <form string="SMS Configuration">
+                    <group>
+                        <field name="url"/>
+                        <field name="login"/>
+                        <field name="password"/>
+                        <field name="sender"/>
+                        <field name="active"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_sms_config_tree">
+            <field name="name">sms.config.tree</field>
+            <field name="model">sms.config</field>
+            <field name="arch" type="xml">
+                <tree string="SMS Configuration">
+                    <field name="url"/>
+                    <field name="login"/>
+                    <field name="password"/>
+                    <field name="sender"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_sms_config">
+            <field name="name">SMS Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sms.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem parent="base.menu_custom" id="menu_sms_config"
+                  action="action_sms_config"/>
+
+    </data>
+</openerp>
